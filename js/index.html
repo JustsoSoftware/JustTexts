@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Justso Content Administration</title>
+    <link href="/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/vendor/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/vendor/justso/justtexts/js/justso.css" rel="stylesheet">
+    <script type="text/javascript" src="/vendor/require.js" data-main="main"></script>
+</head>
+<body>
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand">Justso Content Admin</a>
+            </div>
+            <div class="pull-right">
+                <button class="btn" id="flush">Flush Cache</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div id="page-list-container">
+            <ul id="pages" class="list-group panel panel-default">
+                <li class="list-group-item panel-heading">
+                    <span class="name">Name</span>
+                    <span class="template">Template</span>
+                </li>
+            </ul>
+            <button class="btn" id="add-new-page"><span class="glyphicon glyphicon-plus"></span>Add Page</button>
+        </div>
+
+        <div id="page-texts-container">
+            <ul id="page-texts" class="list-group panel panel-default">
+                <li class="list-group-item panel-heading">
+                    <span class="name">Indentifier</span>
+                    <span class="content">Content</span>
+                </li>
+            </ul>
+            <button class="btn" id="add-new-text"><span class="glyphicon glyphicon-plus"></span>Add Text</button>
+        </div>
+    </div>
+</body>
+</html>

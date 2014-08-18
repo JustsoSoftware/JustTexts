@@ -1,0 +1,10 @@
+{
+    "services": {
+        "page/*/text":   "justso\\justtexts\\service\\Text",
+        "page/*/text/*": "justso\\justtexts\\service\\Text",
+        "page":          "justso\\justtexts\\service\\Page",
+        "page/*":        "justso\\justtexts\\service\\Page",
+        "cache/flush":   "justso\\justtexts\\service\\FlushCache",
+        "language":      "justso\\justtexts\\service\\Language"
+    }
+}
