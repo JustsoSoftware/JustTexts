@@ -7,34 +7,15 @@
  * @package    Generator
  */
 
-define([ "jquery", "backbone" ], function($, Backbone) {
-    var template = '<li class="list-group-item" data-id="<%- data_id %>">' +
-            '<span class="name" contenteditable="true"><%= name %></span>' +
-            '<span class="template" contenteditable="true"><%= template %></span>' +
-            '<span class="btn delete glyphicon glyphicon-remove"></span>' +
-            '</li>';
-
+define([ "jquery", "backbone", "text!templates/PageEntry.html" ], function($, Backbone, template) {
     return Backbone.View.extend({
-        initialize: function() {
-            this.listenTo(this.collection, 'add', this.render);
-        },
+        tagName: 'li',
+        className: "list-group-item",
 
         render: function(page) {
-            var pagesList = $("#pages"),
-                existing = pagesList.find('li data[data-id="' + page.id + '"]'),
-                data = {
-                    data_id:  page.id || ('_' + page.cid),
-                    name:     page.get("name"),
-                    template: page.get("template")
-                },
-                html = _.template(template, data);
-
-            if (existing.length) {
-                existing.replace(html);
-            } else {
-                pagesList.append(html);
-            }
-            return this;
+            this.$el.attr("id", page.cid);
+            this.$el.html(_.template(template, page.attributes));
+            return this.el;
         }
     });
 });

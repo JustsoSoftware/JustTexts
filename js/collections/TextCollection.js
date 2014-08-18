@@ -10,10 +10,9 @@
 define([ "jquery", "backbone", "models/Text" ], function($, Backbone, Text) {
     return Backbone.Collection.extend({
         model: Text,
-        url: '/api/justtexts/page/',
 
         initialize: function(options) {
-            this.url = '/api/justtexts/page/' + options.page + '/text/de';
+            this.url = '/api/justtexts/page/' + options.page + '/text/' + options.language;
         }
     });
 });

@@ -6,6 +6,10 @@ body {
   margin-top: 8px;
 }
 
+#language-switch-container {
+  margin: 8px 10px 0 0;
+}
+
 #page-list-container,
 #page-texts-container {
   display: inline-block;
@@ -16,6 +20,7 @@ body {
 #page-texts {
   .list-group-item {
     padding: 3px 0 0 15px;
+    line-height: 2em;
 
     &:hover {
       background-color: #eee;
@@ -27,6 +32,10 @@ body {
 
     span {
       display: inline-block;
+      min-height: 1.4em;
+      line-height: 1.4em;
+      margin: 2px 0 -5px;
+      vertical-align: top;
     }
     span:first-of-type {
       margin-right: 20px;
@@ -55,12 +64,15 @@ body {
 
 #page-texts {
   .list-group-item {
-    .name {
-      width: 150px;
-      vertical-align: top;
-      margin-top: 6px
-    }
+    .name { width: 150px; }
     .content {
+      width: 300px;
+      &.outdated {
+        border: 1px solid #f00;
+      }
+    }
+    .basecontent {
+      display: none;
       width: 300px;
     }
   }
@@ -70,7 +82,12 @@ body {
   }
 }
 
+.showTranslation #page-texts .list-group-item .basecontent {
+  display: inline-block;
+}
+
 #add-new-page,
 #add-new-text {
   display: block;
 }
+

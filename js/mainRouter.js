@@ -7,28 +7,24 @@
  * @package    Generator
  */
 
-define(["jquery","backbone", "collections/PageCollection", "views/PageView", "models/Page",
+define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", "views/PageView", "models/Page",
         "collections/TextCollection", "views/TextView", "models/Text"],
-    function($, Backbone, PageCollection, PageView, Page, TextCollection, TextView, Text) {
-    var view,
+    function($, Backbone, messages, PageCollection, PageView, Page, TextCollection, TextView, Text) {
+    var pageListView,
         pageList = $("#pages"),
         textsList = $("#page-texts"),
         textsListContainer = $("#page-texts-container"),
-        textView,
+        textListView,
         getModel = function($li, view) {
-            var id = $li.attr("data-id");
-            return view.collection.get(id.match(/^_(.*)/) ? RegExp.$1 : id);
+            return view.collection.get($li.attr("id"));
         },
         showError = function(request, message) {
             alert(message + ": " + request.responseText);
         },
         deleteListItem = function(button, msg, view) {
             var $li = $(button).parent("li");
-            if (!$li.text() || confirm(msg)) {
-                getModel($li, view).destroy({success: function() {
-                        $li.remove();
-                    }
-                });
+            if (!$li.text().trim() || confirm(msg)) {
+                getModel($li, view).destroy();
             }
         };
 
@@ -45,67 +41,114 @@ define(["jquery","backbone", "collections/PageCollection", "views/PageView", "mo
         },
 
         index: function() {
-            var currentPage;
+            var currentPage,
+                self = this,
+                setListenHandler = function(listView, viewClass, container) {
+                    self.listenTo(listView.collection, 'add', function(model) {
+                        var entryView = new viewClass({ model: model });
+                        container.append(entryView.render(model));
+                    });
+                    self.listenTo(listView.collection, 'destroy', function(model) {
+                        var $li = container.find('li[id="' + model.cid + '"]');
+                        if ($li.hasClass("active")) {
+                            textsListContainer.hide();
+                        }
+                        $li.remove();
+                    });
+                },
+                showTextList = function (pageCId) {
+                    var pageId = pageListView.collection.get(pageCId).id,
+                        languageswitch = $("#language-switch");
+                    if (pageId) {
+                        textListView = new Backbone.View({ collection: new TextCollection({page: pageId, language: languageswitch.val()}) });
 
-            view = new PageView({ collection: new PageCollection });
-            view.collection.fetch();
+                        setListenHandler(textListView, TextView, textsList);
+                        textsList.find('li[id]').remove();
+                        textListView.collection.fetch();
+                        textsListContainer.toggleClass("showTranslation", languageswitch[0].selectedIndex > 0);
+                        textsListContainer.show();
+                    } else {
+                        textsListContainer.hide();
+                    }
+                },
+                blurHandler = function($domObj, view, setFunction) {
+                    var model = getModel($domObj, view),
+                        valid = setFunction(model);
+
+                    if (model.changedAttributes() && valid) {
+                        model.save().fail(showError);
+                    }
+                };
+
+            $.get('/api/justtexts/language', '')
+                .then(function(data) {
+                    var box = $("#language-switch");
+                    $.each(data, function() {
+                        box.append('<option>' + this + '</option>');
+                    });
+                })
+                .fail(showError);
+            $("#language-switch").on("change", function() {
+                showTextList(pageList.find('li.active').attr("id"));
+            });
+
+            pageListView = new Backbone.View({ container: pageList, collection: new PageCollection });
+            setListenHandler(pageListView, PageView, pageList);
+            pageListView.collection.fetch();
 
             pageList
                 .on("focus", "li", function() {
-                    var pageId = $(this).attr("data-id");
-                    if (!pageId.match(/^_/) && currentPage !== pageId) {
-                        $('li[data-id="' + currentPage + '"]').removeClass("active");
+                    var pageId = $(this).attr("id");
+                    if (currentPage !== pageId) {
+                        $('li[id="' + currentPage + '"]').removeClass("active");
                         $(this).addClass("active");
                         currentPage = pageId;
-                        textView = new TextView({ collection: new TextCollection({page: pageId}) });
-                        textView.collection.fetch();
-                        textsListContainer.show();
+                        showTextList(pageId);
                     }
                 })
                 .on("blur", "li", function() {
-                    var model = getModel($(this), view);
-
-                    model.set({
-                        name: $(this).find(".name").text(),
-                        template: $(this).find(".template").text()
+                    var $li = $(this);
+                    blurHandler($li, pageListView, function(model) {
+                        model.set({
+                            name: $li.find(".name").text().trim(),
+                            template: $li.find(".template").text().trim()
+                        });
+                        return (model.get("name") && model.get("template"));
                     });
-                    if (model.changedAttributes() && model.get("name") && model.get("template")) {
-                        model.save().fail(showError);
-                    }
                 })
                 .on("click", ".delete", function() {
-                    deleteListItem(this, "Do you really want to delete this page? All texts on it will be lost!", view);
+                    deleteListItem(this, messages.confirmDeletePage, pageListView);
                 });
 
             $("#add-new-page").on("click", function() {
-                view.collection.add(new Page({ id: null, name: '', template: '' }));
+                pageListView.collection.add(new Page({ id: null, name: '', template: '' }));
                 return false;
             });
 
             textsList
                 .on("blur", "li", function() {
-                    var model = getModel($(this), textView);
-                    model.set({
-                        name: $(this).find(".name").text(),
-                        content: $(this).find(".content").html()
+                    var $li = $(this);
+                    blurHandler($li, textListView, function(model) {
+                        model.set({
+                            name: $li.find(".name").text().trim(),
+                            content: $li.find(".content").html()
+                        });
+                        return model.get("name");
                     });
-                    if (model.changedAttributes() && model.get("name")) {
-                        model.save().fail(showError);
-                    }
                 })
                 .on("click", ".delete", function() {
-                    deleteListItem(this, "Do you really want to delete this text?", textView);
+                    deleteListItem(this, messages.confirmDeleteText, textListView);
                 });
 
             $("#add-new-text").on("click", function() {
-                textView.collection.add(new Text({ id: null, name: '', content: '' }));
+                textListView.collection.add(new Text({ id: null, name: '', content: '', outdated: false }));
                 return false;
             });
 
             $("#flush").on("click", function() {
                 $.get("/api/justtexts/cache/flush")
                     .then(function() {
-                        view.collection.sync();
+                        pageListView.collection.sync();
                     })
                     .fail(function(error, message) {
                         alert(message + ': ' + error.responseText);

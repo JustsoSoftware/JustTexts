@@ -14,7 +14,9 @@ require.config({
         "jquery":       "/vendor/jquery-1.11.1.min",
         "jquerymobile": "/vendor/jquery-mobile/jquery.mobile-1.4.3.min",
         "underscore":   "/vendor/underscore-min",
-        "backbone":     "/vendor/backbone-min"
+        "backbone":     "/vendor/backbone-min",
+        "text":         "/vendor/text",
+        "i18n":         "/vendor/i18n"
     },
 
     shim: {

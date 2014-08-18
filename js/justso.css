@@ -4,6 +4,9 @@ body {
 #flush {
   margin-top: 8px; }
 
+#language-switch-container {
+  margin: 8px 10px 0 0; }
+
 #page-list-container,
 #page-texts-container {
   display: inline-block;
@@ -11,7 +14,8 @@ body {
 
 #pages .list-group-item,
 #page-texts .list-group-item {
-  padding: 3px 0 0 15px; }
+  padding: 3px 0 0 15px;
+  line-height: 2em; }
   #pages .list-group-item:hover,
   #page-texts .list-group-item:hover {
     background-color: #eee; }
@@ -20,7 +24,11 @@ body {
       visibility: visible; }
   #pages .list-group-item span,
   #page-texts .list-group-item span {
-    display: inline-block; }
+    display: inline-block;
+    min-height: 1.4em;
+    line-height: 1.4em;
+    margin: 2px 0 -5px;
+    vertical-align: top; }
   #pages .list-group-item span:first-of-type,
   #page-texts .list-group-item span:first-of-type {
     margin-right: 20px; }
@@ -38,13 +46,19 @@ body {
   outline-color: #fff; }
 
 #page-texts .list-group-item .name {
-  width: 150px;
-  vertical-align: top;
-  margin-top: 6px; }
+  width: 150px; }
 #page-texts .list-group-item .content {
+  width: 300px; }
+  #page-texts .list-group-item .content.outdated {
+    border: 1px solid #f00; }
+#page-texts .list-group-item .basecontent {
+  display: none;
   width: 300px; }
 #page-texts .panel-heading.list-group-item .name {
   margin-top: 0; }
+
+.showTranslation #page-texts .list-group-item .basecontent {
+  display: inline-block; }
 
 #add-new-page,
 #add-new-text {
