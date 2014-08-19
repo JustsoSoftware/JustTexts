@@ -9,8 +9,6 @@
 
 namespace justso\justtexts\model;
 
-use justso\justapi\Bootstrap;
-
 /**
  * Class Text
  * @package justso\model
@@ -25,25 +23,31 @@ class Text
 
     private $pageName;
     private $contents = array();
-    private $outdated = array();
 
     /**
-     * Initializes a text page
-     * @param $pageName
+     * Initializes a text page.
+     *
+     * @param string   $pageName  Name of page
+     * @param string   $appRoot   Path where application is installed
+     * @param string[] $languages List of short codes
      */
-    public function __construct($pageName)
+    public function __construct($pageName, $appRoot, $languages)
     {
         $this->pageName = $pageName;
         if (self::$languages === null) {
-            $bootstrap = Bootstrap::getInstance();
-            $config = $bootstrap->getConfiguration();
-            self::$extraLangs = self::$languages = $config['languages'];
+            self::$extraLangs = self::$languages = $languages;
             self::$baseLang = array_shift(self::$extraLangs);
-            self::$baseDir = $bootstrap->getAppRoot() . '/htdocs/nls/';
-            self::$outdatedDir = $bootstrap->getAppRoot() . '/content/outdateInfo/';
+            self::$baseDir = $appRoot . '/htdocs/nls/';
+            self::$outdatedDir = $appRoot . '/content/outdateInfo/';
         }
     }
 
+    /**
+     * Reads the contents of a language file and returns it.
+     *
+     * @param string $language language code
+     * @return array
+     */
     private function readFileContents($language)
     {
         $fileName = $this->getFileName($language);
@@ -68,6 +72,11 @@ class Text
         return $content;
     }
 
+    /**
+     * Writes the current texts of the specified language to the file system.
+     *
+     * @param string $language
+     */
     private function writeTextsToFile($language)
     {
         $textInfo = array();
@@ -85,7 +94,11 @@ class Text
         $this->writeFile($this->getOutdateInfoFileName($language), json_encode($outdateInfo, JSON_PRETTY_PRINT));
     }
 
-    public function getAllTexts($language)
+    /**
+     * @param $language
+     * @return mixed
+     */
+    public function getPageTexts($language)
     {
         if (!isset($this->contents[$language])) {
             $this->contents[$language] = $this->readFileContents($language);
@@ -95,10 +108,10 @@ class Text
 
     public function getTextsWithBaseTexts($language)
     {
-        $texts = $this->getAllTexts($language);
+        $texts = $this->getPageTexts($language);
 
         if ($language !== self::$baseLang) {
-            $baseTexts = $this->getAllTexts(self::$baseLang);
+            $baseTexts = $this->getPageTexts(self::$baseLang);
 
             $texts = array_map(
                 function ($text, $baseText) {
@@ -114,7 +127,7 @@ class Text
 
     public function getText($name, $language)
     {
-        $allTexts = $this->getAllTexts($language);
+        $allTexts = $this->getPageTexts($language);
         if (isset($allTexts[$name])) {
             return $allTexts[$name];
         } else {
@@ -124,7 +137,7 @@ class Text
 
     public function addTextContainer($name, $content, $language)
     {
-        $allTexts = $this->getAllTexts($language);
+        $allTexts = $this->getPageTexts($language);
         if (isset($allTexts[$name])) {
             throw new \Exception("Text container name already used.");
         }
@@ -146,7 +159,7 @@ class Text
     {
         foreach (self::$languages as $lang) {
             $modified = false;
-            $allTexts = $this->getAllTexts($lang);
+            $allTexts = $this->getPageTexts($lang);
             if (!isset($allTexts[$oldName])) {
                 throw new \Exception("Text container unknown.");
             }
@@ -181,7 +194,7 @@ class Text
     public function deleteTextContainer($name)
     {
         foreach (self::$languages as $lang) {
-            $this->getAllTexts($lang);
+            $this->getPageTexts($lang);
             unset($this->contents[$lang][$name]);
             $this->writeTextsToFile($lang);
         }
@@ -211,7 +224,7 @@ class Text
     private function setExtraLanguagesOutdated($name, $content)
     {
         foreach (self::$extraLangs as $lang) {
-            $this->getAllTexts($lang);
+            $this->getPageTexts($lang);
             $this->contents[$lang][$name]['outdated'] = true;
             if (!isset($this->contents[$lang][$name]['content'])) {
                 $this->contents[$lang][$name]['content'] = $content;

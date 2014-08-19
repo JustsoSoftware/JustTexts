@@ -10,8 +10,10 @@
 
 namespace justso\justtexts\service;
 
+use justso\justapi\Bootstrap;
 use justso\justapi\InvalidParameterException;
 use justso\justapi\RestService;
+use justso\justapi\SystemEnvironmentInterface;
 use justso\justtexts\model;
 
 /**
@@ -21,6 +23,28 @@ use justso\justtexts\model;
  */
 class Text extends RestService
 {
+    private $appRoot;
+    private $languages;
+
+    /**
+     * Initialize private variables.
+     *
+     * @param SystemEnvironmentInterface $environment
+     */
+    public function __construct(SystemEnvironmentInterface $environment)
+    {
+        parent::__construct($environment);
+        $bootstrap = Bootstrap::getInstance();
+        $this->appRoot = $bootstrap->getAppRoot();
+        $config = $bootstrap->getConfiguration();
+        $this->languages = $config['languages'];
+    }
+
+    /**
+     * Returns the content of a text container.
+     *
+     * @throws \justso\justapi\InvalidParameterException
+     */
     public function getAction()
     {
         if (!preg_match('/\/page\/(\w+)\/text\/(..)(\/(\w+))?$/', $this->name, $matches)) {
@@ -28,7 +52,7 @@ class Text extends RestService
         }
         $pageName = $matches[1];
         $language = $matches[2];
-        $pageTexts = new model\Text($pageName);
+        $pageTexts = new model\Text($pageName, $this->appRoot, $this->languages);
         if (empty($matches[4])) {
             $result = array_values($pageTexts->getTextsWithBaseTexts($language));
         } else {
@@ -37,6 +61,11 @@ class Text extends RestService
         $this->environment->sendJSONResult($result);
     }
 
+    /**
+     * Creates a new text container.
+     *
+     * @throws \justso\justapi\InvalidParameterException
+     */
     public function postAction()
     {
         if (!preg_match('/\/page\/(\w+)\/text\/(..)$/', $this->name, $matches)) {
@@ -49,7 +78,7 @@ class Text extends RestService
         $content = $request->getParam('content', '');
 
         try {
-            $pageTexts = new model\Text($pageName);
+            $pageTexts = new model\Text($pageName, $this->appRoot, $this->languages);
             $text = $pageTexts->addTextContainer($name, $content, $language);
             $this->environment->sendJSONResult($text);
         } catch (\Exception $e) {
@@ -57,6 +86,11 @@ class Text extends RestService
         }
     }
 
+    /**
+     * Changes an existing text container.
+     *
+     * @throws \justso\justapi\InvalidParameterException
+     */
     public function putAction()
     {
         if (!preg_match('/\/page\/(\w+)\/text\/(..)\/(\w+)$/', $this->name, $matches)) {
@@ -69,7 +103,7 @@ class Text extends RestService
         $content = $request->getParam('content', '');
 
         try {
-            $pageTexts = new model\Text($pageName);
+            $pageTexts = new model\Text($pageName, $this->appRoot, $this->languages);
             $text = $pageTexts->modifyTextContainer($oldName, $newName, $content, $language);
             $this->environment->sendJSONResult($text);
         } catch (\Exception $e) {
@@ -77,13 +111,20 @@ class Text extends RestService
         }
     }
 
+    /**
+     * Deletes a text container.
+     *
+     * @throws \justso\justapi\InvalidParameterException
+     */
     public function deleteAction()
     {
+        // @todo It's not necessary to specify a language, since the texts in all languages are removed.
+
         if (!preg_match('/\/page\/(\w+)\/text\/..\/(\w+)$/', $this->name, $matches)) {
             throw new InvalidParameterException("Invalid parameters");
         }
         list($dummy, $pageName, $containerName) = $matches;
-        $pageTexts = new model\Text($pageName);
+        $pageTexts = new model\Text($pageName, $this->appRoot, $this->languages);
         $pageTexts->deleteTextContainer($containerName);
 
         $this->environment->sendJSONResult('ok');

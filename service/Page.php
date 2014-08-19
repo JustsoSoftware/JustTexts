@@ -66,13 +66,14 @@ class Page extends RestService
 
     public function deleteAction()
     {
-        $config = Bootstrap::getInstance()->getConfiguration();
+        $bootstrap = Bootstrap::getInstance();
+        $config = $bootstrap->getConfiguration();
         $id = $this->getPageId();
         $this->assertPageExistence($id, $config);
         unset($config['pages'][$id]);
-        Bootstrap::getInstance()->setConfiguration($config);
+        $bootstrap->setConfiguration($config);
 
-        $pageTexts = new Text($id);
+        $pageTexts = new Text($id, $bootstrap->getAppRoot(), $config['languages']);
         $pageTexts->removeAll();
 
         $this->environment->sendJSONResult('ok');
