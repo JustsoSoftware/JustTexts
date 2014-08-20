@@ -15,13 +15,17 @@ Add a 'language' attribute to config.json file from JustAPI containing a list of
 
 Example:
 
-  "language": ["de", "en", "fr"]
+```
+"language": ["de", "en", "fr"]
+```
 
 Alter your Apache config file to point the '/justtexts' directory to the JavaScript part of the package and for easy
 access to required libraries:
 
-  Alias /justtexts /path/to/my/project/vendor/justso/justtexts/js
-  Alias /vendor /path/to/my/project/vendor
+```
+Alias /justtexts /path/to/my/project/vendor/justso/justtexts/js
+Alias /vendor /path/to/my/project/vendor
+```
 
 After reloading the apache configuration ("service apache2 reload") the application should be accessible via
 http://your-server.example.com/justtexts/
