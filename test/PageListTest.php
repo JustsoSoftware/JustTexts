@@ -30,11 +30,11 @@ class PageListTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $config = array(
-            'environments' => array('test' => array('approot' => '/var/www')),
+            'environments' => array('test' => array('approot' => '/tmp')),
             'languages' => array('de'),
             'pages' => array('abc', 'def')
         );
-        Bootstrap::getInstance()->setTestConfiguration('/var/www', $config);
+        Bootstrap::getInstance()->setTestConfiguration('/tmp', $config);
 
         $this->list = new PageList(array('abc', 'def'));
     }
@@ -46,6 +46,7 @@ class PageListTest extends \PHPUnit_Framework_TestCase
     {
         parent::tearDown();
         Bootstrap::getInstance()->resetConfiguration();
+        unlink('/tmp/config.json');
     }
 
     public function testGetPages()
