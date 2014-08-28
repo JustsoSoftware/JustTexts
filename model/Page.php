@@ -17,7 +17,7 @@ use justso\justapi\RequestHelper;
  */
 class Page
 {
-    private $name;
+    protected $name;
 
     public function __construct($id=null, $value=null, RequestHelper $request=null)
     {
