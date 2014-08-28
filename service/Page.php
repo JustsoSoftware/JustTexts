@@ -13,6 +13,9 @@ namespace justso\justtexts\service;
 use justso\justapi\Bootstrap;
 use justso\justapi\InvalidParameterException;
 use justso\justapi\RestService;
+use justso\justapi\SystemEnvironmentInterface;
+use justso\justtexts\model;
+use justso\justtexts\model\PageList;
 use justso\justtexts\model\Text;
 
 /**
@@ -22,100 +25,91 @@ use justso\justtexts\model\Text;
  */
 class Page extends RestService
 {
+    /**
+     * @var PageList
+     */
+    private $pageList;
+
+    /**
+     * Initializes the service.
+     *
+     * @param SystemEnvironmentInterface $environment
+     */
+    public function __construct(SystemEnvironmentInterface $environment)
+    {
+        parent::__construct($environment);
+        $config = Bootstrap::getInstance()->getConfiguration();
+        $this->pageList = new PageList($config['pages'], empty($config['pageModel']) ? null : $config['pageModel']);
+    }
+
+    /**
+     * Sets the pageList.
+     *
+     * @param PageList $pageList
+     */
+    public function setPageList(PageList $pageList)
+    {
+        $this->pageList = $pageList;
+    }
+
+    /**
+     * Yields a list of pages or a single page, if a page name is specified in the service name.
+     */
     public function getAction()
     {
-        $config = Bootstrap::getInstance()->getConfiguration();
         $id = $this->getPageId();
         if ($id !== null) {
-            $this->assertPageExistence($id, $config);
-            $result = $this->toJSONObject($id, $config['pages'][$id]);
+            $result = $this->pageList->getPage($id)->getJSON();
         } else {
             $result = array();
-            foreach ($config['pages'] as $pageName => $templateName) {
-                $result[] = $this->toJSONObject($pageName, $templateName);
+            foreach ($this->pageList->getPages() as $pageName) {
+                $result[] = $this->pageList->getPage($pageName)->getJSON();
             }
         }
         $this->environment->sendJSONResult($result);
     }
 
+    /**
+     * Creates a new page
+     */
     public function postAction()
     {
         $request = $this->environment->getRequestHelper();
-        $config = Bootstrap::getInstance()->getConfiguration();
-        $pageName = $request->getIdentifierParam('name');
-        $templateName = $request->getParam('template');
-        $this->assertPageExistence($pageName, $config, false);
-        $this->changePageInfo($pageName, $templateName, $config);
+        $id = $request->getIdentifierParam('name');
+        if ($this->pageList->getPage($id)) {
+            throw new InvalidParameterException("Page already exists");
+        }
+        $page = $this->pageList->addPageFromRequest($id, $request);
+        $this->environment->sendJSONResult($page->getJSON());
     }
 
     public function putAction()
     {
         $request = $this->environment->getRequestHelper();
-        $config = Bootstrap::getInstance()->getConfiguration();
         $id = $this->getPageId();
-        $this->assertPageExistence($id, $config);
-        $pageName = $request->getIdentifierParam('name');
-        $templateName = $request->getParam('template');
-
-        if ($id != $pageName) {
-            $this->assertPageExistence($pageName, $config, false);
-            unset($config['pages'][$id]);
+        $this->pageList->getPage($id);
+        $newName = $request->getIdentifierParam('name');
+        if ($id != $newName) {
+            if ($this->pageList->getPage($newName)) {
+                throw new InvalidParameterException("Page already exists");
+            }
+            $this->pageList->renamePage($id, $newName);
         }
-        $this->changePageInfo($pageName, $templateName, $config);
+        $page = $this->pageList->changePageFromRequest($newName, $request);
+        $this->environment->sendJSONResult($page->getJSON());
     }
 
     public function deleteAction()
     {
+        $id = $this->getPageId();
+        $this->pageList->deletePage($id);
+
         $bootstrap = Bootstrap::getInstance();
         $config = $bootstrap->getConfiguration();
-        $id = $this->getPageId();
-        $this->assertPageExistence($id, $config);
-        unset($config['pages'][$id]);
-        $bootstrap->setConfiguration($config);
-
         $pageTexts = new Text($id, $bootstrap->getAppRoot(), $config['languages']);
         $pageTexts->removeAll();
 
         $this->environment->sendJSONResult('ok');
-    }
-
-    /**
-     * @param string $pageName
-     * @param string $templateName
-     *
-     * @return array
-     */
-    private function toJSONObject($pageName, $templateName)
-    {
-        return array('id' => $pageName, 'name' => $pageName, 'template' => $templateName);
-    }
-
-    /**
-     * Checks that the specified page exists or not
-     *
-     * @param string  $pageName
-     * @param mixed[] $config
-     * @param bool    $exists
-     *
-     * @throws InvalidParameterException
-     */
-    private function assertPageExistence($pageName, $config, $exists = true)
-    {
-        if (empty($config['pages'][$pageName]) === $exists) {
-            throw new InvalidParameterException($exists ? "Page not found" : "Page already exists");
-        }
-    }
-
-    /**
-     * @param string  $pageName
-     * @param string  $templateName
-     * @param mixed[] $config
-     */
-    private function changePageInfo($pageName, $templateName, $config)
-    {
-        $config['pages'][$pageName] = $templateName;
-        Bootstrap::getInstance()->setConfiguration($config);
-        $this->environment->sendJSONResult($this->toJSONObject($pageName, $templateName));
     }
 
     /**
