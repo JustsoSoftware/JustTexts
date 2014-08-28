@@ -46,7 +46,9 @@ class PageListTest extends \PHPUnit_Framework_TestCase
     {
         parent::tearDown();
         Bootstrap::getInstance()->resetConfiguration();
-        unlink('/tmp/config.json');
+        if (file_exists('/tmp/config.json')) {
+            unlink('/tmp/config.json');
+        }
     }
 
     public function testGetPages()
