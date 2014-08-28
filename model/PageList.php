@@ -80,7 +80,9 @@ class PageList
     public function addPageFromRequest($id, RequestHelper $request)
     {
         $page = new $this->pageModel(null, null, $request);
-        return $this->storePageData($id, $page);
+        $this->pages[$id] = $page;
+        $this->persist();
+        return $page;
     }
 
     /**
@@ -94,7 +96,9 @@ class PageList
     {
         $this->getPage($id);
         $page = new $this->pageModel(null, null, $request);
-        return $this->storePageData($id, $page);
+        $this->pages[$id] = $page;
+        $this->persist();
+        return $page;
     }
 
     /**
@@ -107,10 +111,7 @@ class PageList
     {
         $this->pages[$newName] = $this->getPage($id);
         unset ($this->pages[$id]);
-        $config = Bootstrap::getInstance()->getConfiguration();
-        $config['pages'][$newName] = $config['pages'][$id];
-        unset ($config['pages'][$id]);
-        Bootstrap::getInstance()->setConfiguration($config);
+        $this->persist();
     }
 
     /**
@@ -122,24 +123,19 @@ class PageList
     {
         $this->getPage($id);
         unset ($this->pages[$id]);
-        $config = Bootstrap::getInstance()->getConfiguration();
-        unset ($config['pages'][$id]);
-        Bootstrap::getInstance()->setConfiguration($config);
+        $this->persist();
     }
 
     /**
-     * Stores page data in the config file.
-     *
-     * @param string $id
-     * @param Page $page
-     * @return Page
+     * Persists page list in configuration file.
      */
-    private function storePageData($id, Page $page)
+    private function persist()
     {
-        $this->pages[$id] = $page;
         $config = Bootstrap::getInstance()->getConfiguration();
-        $config['pages'][$id] = $page->getConfig();
+        $config['pages'] = array();
+        foreach ($this->pages as $page) {
+            $page->appendConfig($config['pages']);
+        }
         Bootstrap::getInstance()->setConfiguration($config);
-        return $page;
     }
 }

@@ -33,13 +33,18 @@ class Page
         return array('id' => $this->name, 'name' => $this->name);
     }
 
-    public function getConfig()
+    public function getId()
     {
         return $this->name;
     }
 
-    public function getId()
+    /**
+     * Appends the current page configuration to the page config array.
+     *
+     * @param array $config
+     */
+    public function appendConfig(array &$config)
     {
-        return $this->name;
+        $config[] = $this->name;
     }
 }
