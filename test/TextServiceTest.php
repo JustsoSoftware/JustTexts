@@ -27,6 +27,8 @@ class TextServiceTest extends ServiceTestBase
      */
     private $env;
 
+    private $indexFileName;
+
     protected function setUp()
     {
         parent::setUp();
@@ -34,8 +36,9 @@ class TextServiceTest extends ServiceTestBase
         /** @var \justso\justapi\test\FileSystemSandbox $sandbox */
         $sandbox = $this->env->getFileSystem();
         $appRoot = Bootstrap::getInstance()->getAppRoot();
+        $this->indexFileName = $appRoot . '/htdocs/nls/index.js';
         $sandbox->putFile($appRoot . '/htdocs/nls/empty.js', 'define({"root":{}});');
-        $sandbox->putFile($appRoot . '/htdocs/nls/index.js', 'define({"root":{"Test":"Hallo Welt!"}});');
+        $sandbox->putFile($this->indexFileName, 'define({"root":{"Test":"Hallo Welt!"}});');
         $sandbox->resetProtocol();
     }
 
@@ -99,7 +102,28 @@ class TextServiceTest extends ServiceTestBase
 
     public function testPostAction()
     {
+        $service = new Text($this->env);
+        $this->env->getRequestHelper()->set(array('name' => 'NewText', 'content' => 'NewText content'));
+        $service->setName('/page/index/text/de');
+        $service->postAction();
+        $this->assertJSONHeader($this->env);
+        $expected = '{"id":"NewText","name":"NewText","content":"NewText content","outdated":false}';
+        $this->assertSame($expected, $this->env->getResponseContent());
 
+        $this->env->clearResponse();
+        $service->getAction();
+        $this->assertJSONHeader($this->env);
+        $this->assertContains($expected, $this->env->getResponseContent());
+    }
+
+    /**
+     * @expectedException \justso\justapi\InvalidParameterException
+     */
+    public function testInvalidPost()
+    {
+        $service = new Text($this->env);
+        $service->setName('/page/index/text/abc');
+        $service->postAction();
     }
 
     public function testPutAction()
