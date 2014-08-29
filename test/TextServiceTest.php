@@ -87,6 +87,16 @@ class TextServiceTest extends ServiceTestBase
         $this->assertSame('null', $this->env->getResponseContent());
     }
 
+    /**
+     * @expectedException \justso\justapi\InvalidParameterException
+     */
+    public function testInvalidGet()
+    {
+        $service = new Text($this->env);
+        $service->setName('/page/index/text/abc/def');
+        $service->getAction();
+    }
+
     public function testPostAction()
     {
 
