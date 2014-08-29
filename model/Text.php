@@ -98,11 +98,14 @@ class Text
         } else {
             $content = $textInfo;
         }
-        $this->fs->putFile($this->getFileName($language), 'define(' . json_encode($content, JSON_PRETTY_PRINT) . ');');
-        $this->fs->putFile($this->getOutdateInfoFileName($language), json_encode($outdateInfo, JSON_PRETTY_PRINT));
+        $encodeFlags = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES;
+        $this->fs->putFile($this->getFileName($language), 'define(' . json_encode($content, $encodeFlags) . ');');
+        $this->fs->putFile($this->getOutdateInfoFileName($language), json_encode($outdateInfo, $encodeFlags));
     }
 
     /**
+     * Returns all texts of a page in the specified language.
+     *
      * @param $language
      * @return mixed
      */
@@ -114,6 +117,12 @@ class Text
         return $this->contents[$language];
     }
 
+    /**
+     * Returns the texts including an information about the text in the base language.
+     *
+     * @param $language
+     * @return array
+     */
     public function getTextsWithBaseTexts($language)
     {
         $texts = $this->getPageTexts($language);
@@ -133,6 +142,14 @@ class Text
         return $texts;
     }
 
+    /**
+     * Returns the text of a container in the specified language.
+     * If the text is not defined, null is returned.
+     *
+     * @param string $name
+     * @param string $language
+     * @return array
+     */
     public function getText($name, $language)
     {
         $allTexts = $this->getPageTexts($language);
@@ -143,6 +160,15 @@ class Text
         }
     }
 
+    /**
+     * Adds a new text container.
+     *
+     * @param string $name
+     * @param string $content
+     * @param string $language
+     * @return array
+     * @throws \Exception
+     */
     public function addTextContainer($name, $content, $language)
     {
         $allTexts = $this->getPageTexts($language);
@@ -163,6 +189,17 @@ class Text
         return $this->contents[$language][$name];
     }
 
+    /**
+     * Modifies the content and optionally the name of a text container.
+     * If the base language text is changed, the corresponding texts of other languages are invalidated.
+     *
+     * @param string $oldName
+     * @param string $newName
+     * @param string $content
+     * @param string $language
+     * @return array
+     * @throws \Exception
+     */
     public function modifyTextContainer($oldName, $newName, $content, $language)
     {
         foreach (self::$languages as $lang) {
