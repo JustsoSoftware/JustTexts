@@ -23,7 +23,7 @@ Alter your Apache config file to point the '/justtexts' directory to the JavaScr
 access to required libraries:
 
 ```
-Alias /justtexts /path/to/my/project/vendor/justso/justtexts/js
+Alias /justtexts /path/to/my/project/vendor/justso/justtexts/frontend
 Alias /vendor /path/to/my/project/vendor
 ```
 
