@@ -138,7 +138,7 @@ class TextServiceTest extends ServiceTestBase
     {
         $service = new Text($this->env);
         $service->setName('/page/index/text/abc');
-        $service->postAction();
+        $service->putAction();
     }
 
     public function testDeleteAction()
@@ -148,6 +148,16 @@ class TextServiceTest extends ServiceTestBase
         $service->deleteAction();
         $this->assertJSONHeader($this->env);
         $this->assertSame('"ok"', $this->env->getResponseContent());
+    }
+
+    /**
+     * @expectedException \justso\justapi\InvalidParameterException
+     */
+    public function testInvalidDelete()
+    {
+        $service = new Text($this->env);
+        $service->setName('/page/index/text/abc');
+        $service->deleteAction();
     }
 
     /**
