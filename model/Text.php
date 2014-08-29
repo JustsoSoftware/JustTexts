@@ -176,6 +176,8 @@ class Text
                     throw new \Exception("Text container already exists");
                 }
                 $this->contents[$lang][$newName] = $this->contents[$lang][$oldName];
+                $this->contents[$lang][$newName]['id'] = $newName;
+                $this->contents[$lang][$newName]['name'] = $newName;
                 unset($this->contents[$lang][$oldName]);
                 $modified = true;
             }
