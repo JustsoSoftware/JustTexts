@@ -52,7 +52,7 @@ class Text extends RestService
         }
         $pageName = $matches[1];
         $language = $matches[2];
-        $pageTexts = new model\Text($pageName, $this->appRoot, $this->languages);
+        $pageTexts = new model\Text($this->environment->getFileSystem(), $pageName, $this->appRoot, $this->languages);
         if (empty($matches[4])) {
             $result = array_values($pageTexts->getTextsWithBaseTexts($language));
         } else {
@@ -78,7 +78,8 @@ class Text extends RestService
         $content = $request->getParam('content', '');
 
         try {
-            $pageTexts = new model\Text($pageName, $this->appRoot, $this->languages);
+            $fs = $this->environment->getFileSystem();
+            $pageTexts = new model\Text($fs, $pageName, $this->appRoot, $this->languages);
             $text = $pageTexts->addTextContainer($name, $content, $language);
             $this->environment->sendJSONResult($text);
         } catch (\Exception $e) {
@@ -103,7 +104,8 @@ class Text extends RestService
         $content = $request->getParam('content', '');
 
         try {
-            $pageTexts = new model\Text($pageName, $this->appRoot, $this->languages);
+            $fs = $this->environment->getFileSystem();
+            $pageTexts = new model\Text($fs, $pageName, $this->appRoot, $this->languages);
             $text = $pageTexts->modifyTextContainer($oldName, $newName, $content, $language);
             $this->environment->sendJSONResult($text);
         } catch (\Exception $e) {
@@ -124,7 +126,7 @@ class Text extends RestService
             throw new InvalidParameterException("Invalid parameters");
         }
         list($dummy, $pageName, $containerName) = $matches;
-        $pageTexts = new model\Text($pageName, $this->appRoot, $this->languages);
+        $pageTexts = new model\Text($this->environment->getFileSystem(), $pageName, $this->appRoot, $this->languages);
         $pageTexts->deleteTextContainer($containerName);
 
         $this->environment->sendJSONResult('ok');

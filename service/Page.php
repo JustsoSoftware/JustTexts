@@ -106,7 +106,8 @@ class Page extends RestService
 
         $bootstrap = Bootstrap::getInstance();
         $config = $bootstrap->getConfiguration();
-        $pageTexts = new Text($id, $bootstrap->getAppRoot(), $config['languages']);
+        $fs = $this->environment->getFileSystem();
+        $pageTexts = new Text($fs, $id, $bootstrap->getAppRoot(), $config['languages']);
         $pageTexts->removeAll();
 
         $this->environment->sendJSONResult('ok');
