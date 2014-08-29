@@ -66,7 +66,6 @@ class TextServiceTest extends ServiceTestBase
         $service->setName('/page/index/text/de');
         $service->getAction();
         $this->assertJSONHeader($this->env);
-        $expectedJSON = '[{"id":"Test","name":"Test","content":"Hallo Welt!","outdated":true}]';
         $this->assertSame('[' . self::TEST_TEXT . ']', $this->env->getResponseContent());
     }
 
