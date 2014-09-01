@@ -43,13 +43,14 @@ body {
 
     .delete {
       visibility: hidden;
+      margin-top: -5px;
     }
   }
 }
 
 #pages {
   .list-group-item {
-    span {
+    span[contenteditable] {
       width: 150px;
     }
   }

@@ -34,9 +34,10 @@ body {
     margin-right: 20px; }
   #pages .list-group-item .delete,
   #page-texts .list-group-item .delete {
-    visibility: hidden; }
+    visibility: hidden;
+    margin-top: -5px; }
 
-#pages .list-group-item span {
+#pages .list-group-item span[contenteditable] {
   width: 150px; }
 #pages span:focus {
   background: #fff none;
