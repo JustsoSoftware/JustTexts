@@ -50,7 +50,10 @@ class PageServiceTest extends ServiceTestBase
         $mockBuilder = $this->getMockBuilder('\\justso\\justtexts\\model\\PageList');
         $mockBuilder->setConstructorArgs(array(array('abc', 'def')));
         $pageList = $mockBuilder->getMock();
-        $pageList->expects($this->once())->method('addPageFromRequest')->with('test', $request)->will($this->returnValue($page));
+        $pageList->expects($this->once())->method('getPage')->with('test')
+            ->will($this->throwException(new \justso\justapi\InvalidParameterException()));
+        $pageList->expects($this->once())->method('addPageFromRequest')->with('test', $request)
+            ->will($this->returnValue($page));
         $service = new Page($env);
         $service->setPageList($pageList);
         $service->postAction();
