@@ -50,8 +50,11 @@ body {
 
 #pages {
   .list-group-item {
-    span[contenteditable] {
+    span {
       width: 150px;
+      &:last-of-type {
+        width: auto;
+      }
     }
   }
   span:focus {
