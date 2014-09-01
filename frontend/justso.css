@@ -37,8 +37,10 @@ body {
     visibility: hidden;
     margin-top: -5px; }
 
-#pages .list-group-item span[contenteditable] {
+#pages .list-group-item span {
   width: 150px; }
+  #pages .list-group-item span:last-of-type {
+    width: auto; }
 #pages span:focus {
   background: #fff none;
   color: #000;
