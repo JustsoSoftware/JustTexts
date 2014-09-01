@@ -36,8 +36,7 @@ body {
   #page-texts .list-group-item .delete {
     visibility: hidden; }
 
-#pages .list-group-item .name,
-#pages .list-group-item .template {
+#pages .list-group-item span {
   width: 150px; }
 #pages span:focus {
   background: #fff none;

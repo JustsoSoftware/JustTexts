@@ -80,7 +80,7 @@ define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", 
                     }
                 };
 
-            $.get('/api/justtexts/language', '')
+            $.get('/api/justtexts/language')
                 .then(function(data) {
                     var box = $("#language-switch");
                     $.each(data, function() {
@@ -93,8 +93,11 @@ define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", 
             });
 
             pageListView = new Backbone.View({ container: pageList, collection: new PageCollection });
-            setListenHandler(pageListView, PageView, pageList);
-            pageListView.collection.fetch();
+            $.getScript("/api/justtexts/loadPlugins")
+                .then(function() {
+                    setListenHandler(pageListView, PageView, pageList);
+                    pageListView.collection.fetch();
+                });
 
             pageList
                 .on("focus", "li", function() {
@@ -109,11 +112,14 @@ define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", 
                 .on("blur", "li", function() {
                     var $li = $(this);
                     blurHandler($li, pageListView, function(model) {
-                        model.set({
-                            name: $li.find(".name").text().trim(),
-                            template: $li.find(".template").text().trim()
+                        var variables = $li.find("*[contenteditable]"),
+                            allSet = true;
+                        $.each(variables, function() {
+                            var val = $(this).text().trim();
+                            model.set($(this).attr("class"), val);
+                            allSet &= !!val;
                         });
-                        return (model.get("name") && model.get("template"));
+                        return allSet;
                     });
                 })
                 .on("click", ".delete", function() {

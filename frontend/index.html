@@ -27,7 +27,6 @@
             <ul id="pages" class="list-group panel panel-default">
                 <li class="list-group-item panel-heading">
                     <span class="name">Name</span>
-                    <span class="template">Template</span>
                 </li>
             </ul>
             <button class="btn" id="add-new-page"><span class="glyphicon glyphicon-plus"></span>Add Page</button>
@@ -44,5 +43,10 @@
             <button class="btn" id="add-new-text"><span class="glyphicon glyphicon-plus"></span>Add Text</button>
         </div>
     </div>
+
+    <script id="PageEntry" type="text/html">
+        <span class="name" contenteditable="true"><%= name %></span>
+        <span class="btn delete glyphicon glyphicon-remove"></span>
+    </script>
 </body>
 </html>

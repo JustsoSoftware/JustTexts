@@ -7,14 +7,14 @@
  * @package    Generator
  */
 
-define([ "jquery", "backbone", "text!templates/PageEntry.html" ], function($, Backbone, template) {
+define([ "jquery", "backbone" ], function($, Backbone) {
     return Backbone.View.extend({
         tagName: 'li',
         className: "list-group-item",
 
         render: function(page) {
             this.$el.attr("id", page.cid);
-            this.$el.html(_.template(template, page.attributes));
+            this.$el.html(_.template($("#PageEntry").html(), page.attributes));
             return this.el;
         }
     });

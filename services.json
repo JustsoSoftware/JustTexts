@@ -4,6 +4,7 @@
         "page/*/text/*": "justso\\justtexts\\service\\Text",
         "page":          "justso\\justtexts\\service\\Page",
         "page/*":        "justso\\justtexts\\service\\Page",
-        "language":      "justso\\justtexts\\service\\Language"
+        "language":      "justso\\justtexts\\service\\Language",
+        "loadPlugins":   "justso\\justtexts\\service\\PluginLoader"
     }
 }
