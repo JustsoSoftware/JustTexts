@@ -78,11 +78,12 @@ class Page extends RestService
         $id = $request->getIdentifierParam('name');
         try {
             $this->pageList->getPage($id);
-            throw new InvalidParameterException("Page already exists");
         } catch (InvalidParameterException $e) {
+            $page = $this->pageList->addPageFromRequest($id, $request);
+            $this->environment->sendJSONResult($page->getJSON());
+            return;
         }
-        $page = $this->pageList->addPageFromRequest($id, $request);
-        $this->environment->sendJSONResult($page->getJSON());
+        throw new InvalidParameterException("Page already exists");
     }
 
     public function putAction()
