@@ -64,3 +64,7 @@ translation easier.
 JustTexts takes care on texts changed after translations. So, if your text in the base language is changed, the texts in
 the container of all other languages is marked as outdated. In the administration, outdated texts are marked in red, so
 it is relatively easy to find such texts and re-translate them if necessary.
+
+## Support & More
+
+If you need support, please contact us: http://justso.de
