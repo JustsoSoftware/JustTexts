@@ -98,6 +98,7 @@ class TextServiceTest extends ServiceTestBase
         $service = new Text($this->env);
         $service->setName('/page/index/text/abc/def');
         $service->getAction();
+        // @codeCoverageIgnoreStart
     }
 
     public function testPostAction()
@@ -121,6 +122,7 @@ class TextServiceTest extends ServiceTestBase
         $service = new Text($this->env);
         $service->setName('/page/index/text/abc');
         $service->postAction();
+        // @codeCoverageIgnoreStart
     }
 
     public function testPutAction()
@@ -146,6 +148,7 @@ class TextServiceTest extends ServiceTestBase
         $service = new Text($this->env);
         $service->setName('/page/index/text/abc');
         $service->putAction();
+        // @codeCoverageIgnoreStart
     }
 
     public function testDeleteAction()
@@ -165,6 +168,7 @@ class TextServiceTest extends ServiceTestBase
         $service = new Text($this->env);
         $service->setName('/page/index/text/abc');
         $service->deleteAction();
+        // @codeCoverageIgnoreStart
     }
 
     /**
