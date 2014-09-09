@@ -34,13 +34,20 @@ class TextServiceTest extends ServiceTestBase
     {
         parent::setUp();
         $this->env = $this->createTestEnvironment();
+
+        $config = array(
+            'environments' => array('test' => array('approot' => '/test-root')),
+            'languages' => array('de'),
+            'pages' => array('abc' => 'testTemplate')
+        );
+        Bootstrap::getInstance()->setTestConfiguration('/test-root', $config);
+
         /** @var \justso\justapi\test\FileSystemSandbox $sandbox */
         $sandbox = $this->env->getFileSystem();
-        $appRoot = Bootstrap::getInstance()->getAppRoot();
-        $this->indexFileName = $appRoot . '/htdocs/nls/index.js';
-        $sandbox->putFile($appRoot . '/htdocs/nls/empty.js', 'define({"root":{}});');
+        $this->indexFileName = '/test-root/htdocs/nls/index.js';
+        $sandbox->putFile('/test-root/htdocs/nls/empty.js', 'define({"root":{}});');
         $sandbox->putFile($this->indexFileName, 'define({"root":{"Test":"Hallo Welt!"}});');
-        $sandbox->putFile($appRoot . '/htdocs/nls/en/index.js', 'define({"Test":"Hello World!"});');
+        $sandbox->putFile('/test-root/htdocs/nls/en/index.js', 'define({"Test":"Hello World!"});');
         $sandbox->resetProtocol();
     }
 
