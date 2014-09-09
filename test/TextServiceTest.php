@@ -100,6 +100,7 @@ class TextServiceTest extends ServiceTestBase
         $service->getAction();
         // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     public function testPostAction()
     {
@@ -124,6 +125,7 @@ class TextServiceTest extends ServiceTestBase
         $service->postAction();
         // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     public function testPutAction()
     {
@@ -150,6 +152,7 @@ class TextServiceTest extends ServiceTestBase
         $service->putAction();
         // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     public function testDeleteAction()
     {
@@ -170,6 +173,7 @@ class TextServiceTest extends ServiceTestBase
         $service->deleteAction();
         // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     /**
      * @param RestService $service
