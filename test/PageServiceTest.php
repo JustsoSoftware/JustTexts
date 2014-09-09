@@ -71,7 +71,9 @@ class PageServiceTest extends ServiceTestBase
         $service = new Page($env);
         $service->setPageList($pageList);
         $service->postAction();
+        // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     public function testChangePage()
     {
