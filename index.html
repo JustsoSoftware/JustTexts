@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Justtexts by JustsoSoftware</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Justtexts</h1>
+          <h2>Simple administration of multi-language (i18n) texts via Web Browser.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/JustsoSoftware/JustTexts/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/JustsoSoftware/JustTexts/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/JustsoSoftware/JustTexts" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="justtexts" class="anchor" href="#justtexts"><span class="octicon octicon-link"></span></a>JustTexts</h1>
+
+<p>Multi language text administration tool.</p>
+
+<p>The purpose of this tool is to administer text containers for multiple languages via a browser and place it in i18n
+compatible format in the file system to be used in all kinds of programming languages, either backend or frontend.</p>
+
+<p>With JavaScript, the texts can be used via i18n.js (see: <a href="http://github.com/requirejs/i18n">http://github.com/requirejs/i18n</a> for details).</p>
+
+<h2>
+<a name="setup" class="anchor" href="#setup"><span class="octicon octicon-link"></span></a>Setup</h2>
+
+<p>This package requires JustAPI as REST API backend, so checkout JustAPI into vendor/justso/justapi.
+Checkout this package into vendor/justso/justtexts
+Add a 'language' attribute to config.json file from JustAPI containing a list of language codes you want to use.</p>
+
+<p>Example:</p>
+
+<pre><code>"language": ["de", "en", "fr"]
+</code></pre>
+
+<p>Alter your Apache config file to point the '/justtexts' directory to the JavaScript part of the package and for easy
+access to required libraries:</p>
+
+<pre><code>Alias /justtexts /path/to/my/project/vendor/justso/justtexts/frontend
+Alias /vendor /path/to/my/project/vendor
+</code></pre>
+
+<p>After reloading the apache configuration ("service apache2 reload") the application should be accessible via
+<a href="http://your-server.example.com/justtexts/">http://your-server.example.com/justtexts/</a></p>
+
+<h2>
+<a name="usage-of-text-administration" class="anchor" href="#usage-of-text-administration"><span class="octicon octicon-link"></span></a>Usage of text administration</h2>
+
+<p>Texts are grouped as 'pages'. So, at first, create a page in the list and give it a name. It is good practice to use
+the same name as the html page's name (not the title), so if your URL is <a href="http://your-server.example.com/my-page.html">http://your-server.example.com/my-page.html</a>, it
+would be easy for you to find the corresponding texts later if you name the page 'my-page'.</p>
+
+<p>Creating a page is easy: just press the "Add page" button and click on the "Name" field in the empty list row. After
+entering a name and leaving the field (by clicking somewhere else or pressing the tab button) the page is created.
+Changing the name is easy as well: just click on the name and change it. Again, the change is made persisting when you
+leave the field. By moving the mouse over the row, a 'x' icon is displayed at the right of the row, allowing you to
+delete the page.</p>
+
+<p>After creating a page, a second list is displayed right of the first one. There you see all texts yet defined in this
+page - none. With the "Add text" button you can create new text blocks for the page, each having a unique name and the
+text itself. The text is later accessed via its unique name. Creating, altering or deleting texts is just the same as
+with pages. Just WYSIWYG.</p>
+
+<h2>
+<a name="accessing-texts" class="anchor" href="#accessing-texts"><span class="octicon octicon-link"></span></a>Accessing texts</h2>
+
+<p>Texts are placed in a directory 'htdocs/nls' in JavaScript files compatible to i18n.js (see above) and can be accessed
+with this package, which is a require.js plugin. So, just require "i18n!my-page" in your AMD module to access texts for
+your page with the name 'my-page'. The names of the text containers are the names of the parameter's attributes. i18n
+takes care of loading the texts in the language your user prefers - if it exists. Else, it defaults to the language
+defined first in your config.json file.</p>
+
+<h2>
+<a name="translation" class="anchor" href="#translation"><span class="octicon octicon-link"></span></a>Translation</h2>
+
+<p>Translation means calling the administration and changing the language to the desired one. The text in the base language
+(this is the language defined first in your config.json file) is displayed side by side for each text container to make
+translation easier.</p>
+
+<p>JustTexts takes care on texts changed after translations. So, if your text in the base language is changed, the texts in
+the container of all other languages is marked as outdated. In the administration, outdated texts are marked in red, so
+it is relatively easy to find such texts and re-translate them if necessary.</p>
+
+<h2>
+<a name="support--more" class="anchor" href="#support--more"><span class="octicon octicon-link"></span></a>Support &amp; More</h2>
+
+<p>If you need support, please contact us: <a href="http://justso.de">http://justso.de</a></p>
+        </section>
+
+        <footer>
+          Justtexts is maintained by <a href="https://github.com/JustsoSoftware">JustsoSoftware</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+                  <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-54643020-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+      </div>
+    </div>
+  </body>
+</html>
