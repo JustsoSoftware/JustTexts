@@ -11,12 +11,19 @@ With JavaScript, the texts can be used via i18n.js (see: http://github.com/requi
 
 This package requires JustAPI as REST API backend, so checkout JustAPI into vendor/justso/justapi.
 Checkout this package into vendor/justso/justtexts
-Add a 'language' attribute to config.json file from JustAPI containing a list of language codes you want to use.
+Add a 'language' attribute to config.json file from JustAPI containing a list of language codes you want to use and an
+entry in the "services" section of config.json for the JustTexts services.
 
 Example:
 
 ```
-"language": ["de", "en", "fr"]
+...
+"language": ["de", "en", "fr"],
+"services": {
+    ...
+    "justtexts/*": "file:vendor/justso/justtexts/services.json"
+}
+...
 ```
 
 Alter your Apache config file to point the '/justtexts' directory to the JavaScript part of the package and for easy
