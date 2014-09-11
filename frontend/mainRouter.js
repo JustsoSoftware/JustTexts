@@ -150,17 +150,10 @@ define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", 
                 textListView.collection.add(new Text({ id: null, name: '', content: '', outdated: false }));
                 return false;
             });
+        },
 
-            $("#flush").on("click", function() {
-                $.get("/api/justtexts/cache/flush")
-                    .then(function() {
-                        pageListView.collection.sync();
-                    })
-                    .fail(function(error, message) {
-                        alert(message + ': ' + error.responseText);
-                    });
-                return false;
-            });
+        refreshPageListView: function() {
+            pageListView.collection.sync();
         }
     });
 });
