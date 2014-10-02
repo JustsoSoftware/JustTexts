@@ -18,7 +18,7 @@ Example:
 
 ```
 ...
-"language": ["de", "en", "fr"],
+"languages": ["de", "en", "fr"],
 "services": {
     ...
     "justtexts/*": "file:vendor/justso/justtexts/services.json"
