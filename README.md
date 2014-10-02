@@ -26,6 +26,18 @@ Example:
 ...
 ```
 
+### Download required libraries
+
+The following libraries are needed:
+- Backbone.js: http://backbonejs.org
+- Require.js: http://requirejs.org/docs/download.html#requirejs
+- text Plugin: http://requirejs.org/docs/download.html#text
+- i18n Plugin: http://requirejs.org/docs/download.html#i18n
+- jQuery: http://jquery.com/download/
+- Underscrore.js http://underscorejs.org
+
+### Adapt Apache configuration
+
 Alter your Apache config file to point the '/justtexts' directory to the JavaScript part of the package and for easy
 access to required libraries:
 
