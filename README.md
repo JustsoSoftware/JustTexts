@@ -35,6 +35,9 @@ The following libraries are needed:
 - i18n Plugin: http://requirejs.org/docs/download.html#i18n
 - jQuery: http://jquery.com/download/
 - Underscrore.js http://underscorejs.org
+- Bootstrap http://getbootstrap.com/getting-started
+
+Just download them as minimized versions together with the corresponding .map files into vendor folder.
 
 ### Adapt Apache configuration
 
