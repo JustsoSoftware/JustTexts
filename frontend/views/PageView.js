@@ -8,13 +8,15 @@
  */
 
 define([ "jquery", "backbone" ], function($, Backbone) {
+    var compiled = _.template($("#PageEntry").html());
+
     return Backbone.View.extend({
         tagName: 'li',
         className: "list-group-item",
 
         render: function(page) {
             this.$el.attr("id", page.cid);
-            this.$el.html(_.template($("#PageEntry").html(), page.attributes));
+            this.$el.html(compiled(page.attributes));
             return this.el;
         }
     });
