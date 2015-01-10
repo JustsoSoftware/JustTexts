@@ -11,7 +11,7 @@ require.config({
     waitSeconds: 30,
     baseUrl: ".",
     paths: {
-        "jquery":       "/vendor/jquery-1.11.1.min",
+        "jquery":       "/vendor/jquery-1.11.2.min",
         "jquerymobile": "/vendor/jquery-mobile/jquery.mobile-1.4.3.min",
         "underscore":   "/vendor/underscore-min",
         "backbone":     "/vendor/backbone-min",
