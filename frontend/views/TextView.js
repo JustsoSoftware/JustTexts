@@ -8,6 +8,8 @@
  */
 
 define([ "jquery", "backbone", "text!templates/TextEntry.html" ], function($, Backbone, template) {
+    var t = _.template(template);
+
     return Backbone.View.extend({
         tagName: 'li',
         className: "list-group-item",
@@ -18,7 +20,7 @@ define([ "jquery", "backbone", "text!templates/TextEntry.html" ], function($, Ba
 
         render: function(text) {
             this.$el.attr("id", text.cid);
-            this.$el.html(_.template(template, text.attributes));
+            this.$el.html(t(text.attributes));
             return this.el;
         }
     });
