@@ -8,7 +8,7 @@
  */
 
 define([ "jquery", "backbone", "text!templates/TextEntry.html" ], function($, Backbone, template) {
-    var t = _.template(template);
+    var compiled = _.template(template);
 
     return Backbone.View.extend({
         tagName: 'li',
@@ -20,7 +20,7 @@ define([ "jquery", "backbone", "text!templates/TextEntry.html" ], function($, Ba
 
         render: function(text) {
             this.$el.attr("id", text.cid);
-            this.$el.html(t(text.attributes));
+            this.$el.html(compiled(text.attributes));
             return this.el;
         }
     });

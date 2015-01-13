@@ -18,13 +18,28 @@ Example:
 
 ```
 ...
-"language": ["de", "en", "fr"],
+"languages": ["de", "en", "fr"],
 "services": {
     ...
     "justtexts/*": "file:vendor/justso/justtexts/services.json"
 }
 ...
 ```
+
+### Download required libraries
+
+The following libraries are needed:
+- Backbone.js: http://backbonejs.org
+- Require.js: http://requirejs.org/docs/download.html#requirejs
+- text Plugin: http://requirejs.org/docs/download.html#text
+- i18n Plugin: http://requirejs.org/docs/download.html#i18n
+- jQuery: http://jquery.com/download/
+- Underscrore.js http://underscorejs.org
+- Bootstrap http://getbootstrap.com/getting-started
+
+Just download them as minimized versions together with the corresponding .map files into vendor folder.
+
+### Adapt Apache configuration
 
 Alter your Apache config file to point the '/justtexts' directory to the JavaScript part of the package and for easy
 access to required libraries:

@@ -8,7 +8,7 @@
  */
 
 define([ "jquery", "backbone" ], function($, Backbone) {
-    var t = _.template($("#PageEntry").html());
+    var compiled = _.template($("#PageEntry").html());
 
     return Backbone.View.extend({
         tagName: 'li',
@@ -16,7 +16,7 @@ define([ "jquery", "backbone" ], function($, Backbone) {
 
         render: function(page) {
             this.$el.attr("id", page.cid);
-            this.$el.html(t(page.attributes));
+            this.$el.html(compiled(page.attributes));
             return this.el;
         }
     });
