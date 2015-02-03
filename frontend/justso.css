@@ -27,7 +27,7 @@ body {
     display: inline-block;
     min-height: 1.4em;
     line-height: 1.4em;
-    margin: 2px 0 -5px;
+    margin: 2px 0;
     vertical-align: top; }
   #pages .list-group-item span:first-of-type,
   #page-texts .list-group-item span:first-of-type {
@@ -65,3 +65,5 @@ body {
 #add-new-page,
 #add-new-text {
   display: block; }
+
+/*# sourceMappingURL=justso.css.map */
