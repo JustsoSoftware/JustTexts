@@ -7,9 +7,9 @@
  * @package    Generator
  */
 
-define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", "views/PageView", "models/Page",
+define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", "models/Page",
         "collections/TextCollection", "views/TextView", "models/Text"],
-    function($, Backbone, messages, PageCollection, PageView, Page, TextCollection, TextView, Text) {
+    function($, Backbone, messages, PageCollection, Page, TextCollection, TextView, Text) {
     var pageListView,
         pageList = $("#pages"),
         textsList = $("#page-texts"),
@@ -95,8 +95,10 @@ define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", 
             pageListView = new Backbone.View({ container: pageList, collection: new PageCollection });
             $.getScript("/api/justtexts/loadPlugins")
                 .then(function() {
-                    setListenHandler(pageListView, PageView, pageList);
-                    pageListView.collection.fetch();
+                    require(["views/PageView"], function(PageView) {
+                        setListenHandler(pageListView, PageView, pageList);
+                        pageListView.collection.fetch();
+                    });
                 });
 
             pageList
