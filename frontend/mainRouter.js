@@ -137,11 +137,20 @@ define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", 
                 .on("blur", "li", function() {
                     var $li = $(this);
                     blurHandler($li, textListView, function(model) {
-                        model.set({
-                            name: $li.find(".name").text().trim(),
-                            content: $li.find(".content").html()
-                        });
-                        return model.get("name");
+                        var nameField = $li.find(".name"),
+                            name = nameField.text().trim();
+
+                        if (!name.match(/^\w+$/)) {
+                            alert("Illegal characters in text block name. Can only use a-z and '_'. All other characters are removed.");
+                            nameField.text(name.replace(/\W/, ""));
+                            return false;
+                        } else {
+                            model.set({
+                                name: name,
+                                content: $li.find(".content").html()
+                            });
+                            return model.get("name");
+                        }
                     });
                 })
                 .on("click", ".delete", function() {
