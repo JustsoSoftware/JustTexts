@@ -146,6 +146,11 @@ define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", 
                 })
                 .on("click", ".delete", function() {
                     deleteListItem(this, messages.confirmDeleteText, textListView);
+                })
+                .on("keypress", "span", function(e) {
+                    if (e.keyCode === 13) {
+                        document.execCommand('formatBlock', false, 'p');
+                    }
                 });
 
             $("#add-new-text").on("click", function() {
