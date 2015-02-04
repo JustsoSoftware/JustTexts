@@ -17,11 +17,11 @@ use justso\justapi\FileSystemInterface;
  */
 class Text
 {
-    private static $languages = null;
-    private static $baseLang;
-    private static $extraLangs;
-    private static $baseDir;
-    private static $outdatedDir;
+    private $languages = null;
+    private $baseLang;
+    private $extraLangs;
+    private $baseDir;
+    private $outdatedDir;
     /**
      * @var FileSystemInterface
      */
@@ -42,11 +42,11 @@ class Text
     {
         $this->pageName = $pageName;
         $this->fs = $fs;
-        if (self::$languages === null) {
-            self::$extraLangs = self::$languages = $languages;
-            self::$baseLang = array_shift(self::$extraLangs);
-            self::$baseDir = $appRoot . '/htdocs/nls/';
-            self::$outdatedDir = $appRoot . '/content/outdateInfo/';
+        if ($this->languages === null) {
+            $this->extraLangs = $this->languages = $languages;
+            $this->baseLang = array_shift($this->extraLangs);
+            $this->baseDir = $appRoot . '/htdocs/nls/';
+            $this->outdatedDir = $appRoot . '/content/outdateInfo/';
         }
     }
 
@@ -63,7 +63,7 @@ class Text
             return array();
         }
         $content = json_decode(preg_replace('/^define\((.*)\);/s', '$1', $this->fs->getFile($fileName)), true);
-        if ($language === self::$baseLang) {
+        if ($language === $this->baseLang) {
             $content = $content['root'];
         }
 
@@ -93,8 +93,8 @@ class Text
             $textInfo[$id] = $info['content'];
             $outdateInfo[$id] = $info['outdated'];
         }
-        if ($language === self::$baseLang) {
-            $content = array('root' => $textInfo) + array_fill_keys(self::$extraLangs, true);
+        if ($language === $this->baseLang) {
+            $content = array('root' => $textInfo) + array_fill_keys($this->extraLangs, true);
         } else {
             $content = $textInfo;
         }
@@ -127,8 +127,8 @@ class Text
     {
         $texts = $this->getPageTexts($language);
 
-        if ($language !== self::$baseLang) {
-            $baseTexts = $this->getPageTexts(self::$baseLang);
+        if ($language !== $this->baseLang) {
+            $baseTexts = $this->getPageTexts($this->baseLang);
 
             $texts = array_map(
                 function ($text, $baseText) {
@@ -182,7 +182,7 @@ class Text
             'outdated' => false
         );
         $this->writeTextsToFile($language);
-        if ($language === self::$baseLang) {
+        if ($language === $this->baseLang) {
             $this->setExtraLanguagesOutdated($name, $content);
         }
 
@@ -202,7 +202,7 @@ class Text
      */
     public function modifyTextContainer($oldName, $newName, $content, $language)
     {
-        foreach (self::$languages as $lang) {
+        foreach ($this->languages as $lang) {
             $modified = false;
             $allTexts = $this->getPageTexts($lang);
             if (!isset($allTexts[$oldName])) {
@@ -222,7 +222,7 @@ class Text
                 $this->contents[$lang][$newName]['content'] = $content;
                 $this->contents[$lang][$newName]['outdated'] = false;
                 $modified = true;
-            } elseif ($language === self::$baseLang) {
+            } elseif ($language === $this->baseLang) {
                 $this->contents[$lang][$newName]['outdated'] = true;
                 $modified = true;
             }
@@ -240,7 +240,7 @@ class Text
      */
     public function deleteTextContainer($name)
     {
-        foreach (self::$languages as $lang) {
+        foreach ($this->languages as $lang) {
             $this->getPageTexts($lang);
             unset($this->contents[$lang][$name]);
             $this->writeTextsToFile($lang);
@@ -255,10 +255,10 @@ class Text
      */
     private function getFileName($language)
     {
-        if ($language === self::$baseLang) {
-            return self::$baseDir . $this->pageName . '.js';
+        if ($language === $this->baseLang) {
+            return $this->baseDir . $this->pageName . '.js';
         } else {
-            return self::$baseDir . $language . '/' . $this->pageName . '.js';
+            return $this->baseDir . $language . '/' . $this->pageName . '.js';
         }
     }
 
@@ -270,7 +270,7 @@ class Text
      */
     private function setExtraLanguagesOutdated($name, $content)
     {
-        foreach (self::$extraLangs as $lang) {
+        foreach ($this->extraLangs as $lang) {
             $this->getPageTexts($lang);
             $this->contents[$lang][$name]['outdated'] = true;
             if (!isset($this->contents[$lang][$name]['content'])) {
@@ -286,7 +286,7 @@ class Text
      */
     private function getOutdateInfoFileName($language)
     {
-        return self::$outdatedDir . $language . '/' . $this->pageName . '.json';
+        return $this->outdatedDir . $language . '/' . $this->pageName . '.json';
     }
 
     /**
@@ -294,11 +294,11 @@ class Text
      */
     public function removeAll()
     {
-        $this->fs->deleteFile(self::$baseDir . $this->pageName . '.js');
-        $this->fs->deleteFile(self::$outdatedDir . self::$baseLang . '/' . $this->pageName . '.json');
-        foreach (self::$extraLangs as $language) {
-            $this->fs->deleteFile(self::$baseDir . $language . '/' . $this->pageName . '.js');
-            $this->fs->deleteFile(self::$outdatedDir . $language . '/' . $this->pageName . '.json');
+        $this->fs->deleteFile($this->baseDir . $this->pageName . '.js');
+        $this->fs->deleteFile($this->outdatedDir . $this->baseLang . '/' . $this->pageName . '.json');
+        foreach ($this->extraLangs as $language) {
+            $this->fs->deleteFile($this->baseDir . $language . '/' . $this->pageName . '.js');
+            $this->fs->deleteFile($this->outdatedDir . $language . '/' . $this->pageName . '.json');
         }
     }
 }
