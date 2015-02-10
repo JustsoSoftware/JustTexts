@@ -47,7 +47,7 @@ class Text extends RestService
      */
     public function getAction()
     {
-        if (!preg_match('/\/page\/(\w+)\/text\/(..)(\/(\w+))?$/', $this->name, $matches)) {
+        if (!preg_match('/\/page\/(\w+\-?\w*)\/text\/(..)(\/(\w+))?$/', $this->name, $matches)) {
             throw new InvalidParameterException("Invalid parameters");
         }
         $pageName = $matches[1];
@@ -68,7 +68,7 @@ class Text extends RestService
      */
     public function postAction()
     {
-        if (!preg_match('/\/page\/(\w+)\/text\/(..)$/', $this->name, $matches)) {
+        if (!preg_match('/\/page\/(\w+\-?\w*)\/text\/(..)$/', $this->name, $matches)) {
             throw new InvalidParameterException("Invalid parameters");
         }
         list($dummy, $pageName, $language) = $matches;
@@ -94,7 +94,7 @@ class Text extends RestService
      */
     public function putAction()
     {
-        if (!preg_match('/\/page\/(\w+)\/text\/(..)\/(\w+)$/', $this->name, $matches)) {
+        if (!preg_match('/\/page\/(\w+\-?\w*)\/text\/(..)\/(\w+)$/', $this->name, $matches)) {
             throw new InvalidParameterException("Invalid parameters");
         }
         list($dummy, $pageName, $language, $oldName) = $matches;
@@ -122,7 +122,7 @@ class Text extends RestService
     {
         // @todo It's not necessary to specify a language, since the texts in all languages are removed.
 
-        if (!preg_match('/\/page\/(\w+)\/text\/..\/(\w+)$/', $this->name, $matches)) {
+        if (!preg_match('/\/page\/(\w+\-?\w*)\/text\/..\/(\w+)$/', $this->name, $matches)) {
             throw new InvalidParameterException("Invalid parameters");
         }
         list($dummy, $pageName, $containerName) = $matches;
