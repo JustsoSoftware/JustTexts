@@ -175,6 +175,35 @@ class TextServiceTest extends ServiceTestBase
     }
     // @codeCoverageIgnoreEnd
 
+    public function testPageNamesCanContainHyphens()
+    {
+        $service = new Text($this->env);
+        $this->env->getRequestHelper()->set(array('name' => 'Text', 'content' => 'Text content'));
+        $service->setName('/page/test-page/text/de');
+        $service->postAction();
+        $this->assertJSONHeader($this->env);
+        $expected = '{"id":"Text","name":"Text","content":"Text content","outdated":false}';
+        $this->assertSame($expected, $this->env->getResponseContent());
+
+        $this->env->clearResponse();
+        $service->setName('/page/test-page/text/de/Text');
+        $service->getAction();
+        $this->assertJSONHeader($this->env);
+        $this->assertSame($expected, $this->env->getResponseContent());
+
+        $this->env->clearResponse();
+        $this->env->getRequestHelper()->set(array('name' => 'Text', 'content' => 'New Text content'));
+        $service->putAction();
+        $this->assertJSONHeader($this->env);
+        $expected = '{"id":"Text","name":"Text","content":"New Text content","outdated":false}';
+        $this->assertSame($expected, $this->env->getResponseContent());
+
+        $this->env->clearResponse();
+        $service->deleteAction();
+        $this->assertJSONHeader($this->env);
+        $this->assertSame('"ok"', $this->env->getResponseContent());
+    }
+
     /**
      * @param RestService $service
      * @param string      $container
