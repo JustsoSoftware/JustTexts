@@ -9,7 +9,10 @@
 
 namespace justso\justtexts\test;
 
+use justso\justapi\Bootstrap;
 use justso\justapi\test\ServiceTestBase;
+use justso\justapi\test\FileSystemSandbox;
+use justso\justapi\test\TestEnvironment;
 use justso\justtexts\service\PluginLoader;
 
 /**
@@ -21,6 +24,38 @@ class PluginLoaderTest extends ServiceTestBase
     public function testLoader()
     {
         $env = $this->createTestEnvironment();
+        /** @var FileSystemSandbox $sandbox */
+        $sandbox = $env->getFileSystem();
+        $appRoot = Bootstrap::getInstance()->getAppRoot();
+        $content = 'var test;';
+        $sandbox->putFile($appRoot . '/vendor/justso/justtexts/justtexts-plugin.js', $content);
+        $this->checkPlugin($env, $content);
+    }
+
+    public function testLoaderWithoutPlugins()
+    {
+        $env = $this->createTestEnvironment();
+        $this->checkPlugin($env, '');
+    }
+
+    public function testLoaderWithMultiplePlugins()
+    {
+        $env = $this->createTestEnvironment();
+        /** @var FileSystemSandbox $sandbox */
+        $sandbox = $env->getFileSystem();
+        $appRoot = Bootstrap::getInstance()->getAppRoot();
+        $content = array('var test;', 'var test2;');
+        $sandbox->putFile($appRoot . '/vendor/justso/test1/justtexts-plugin.js', $content[0]);
+        $sandbox->putFile($appRoot . '/vendor/justso/test2/justtexts-plugin.js', $content[1]);
+        $this->checkPlugin($env, implode('', $content));
+    }
+
+    /**
+     * @param TestEnvironment $env
+     * @param string          $content
+     */
+    private function checkPlugin(TestEnvironment $env, $content)
+    {
         $service = new PluginLoader($env);
         $service->getAction();
         $this->assertEquals(
@@ -30,5 +65,6 @@ class PluginLoaderTest extends ServiceTestBase
             ),
             $env->getResponseHeader()
         );
+        $this->assertEquals($content, $env->getResponseContent());
     }
 }

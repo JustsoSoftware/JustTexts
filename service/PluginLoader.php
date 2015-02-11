@@ -20,12 +20,11 @@ class PluginLoader extends RestService
 {
     public function getAction()
     {
-        $this->environment->sendHeader('HTTP/1.0 200 Ok');
-        $this->environment->sendHeader('Content-Type: text/javascript; charset=utf-8');
-        $bootstrap = Bootstrap::getInstance();
-        foreach ($this->environment->getFileSystem()->glob($bootstrap->getAppRoot() . '/vendor/*/*/justtexts-plugin.js') as $file) {
-            $content = $this->environment->getFileSystem()->getFile($file);
-            $this->environment->sendResult('200 Ok', 'text/javascript; charset=utf-8', $content);
+        $appRoot = Bootstrap::getInstance()->getAppRoot();
+        $content = '';
+        foreach ($this->environment->getFileSystem()->glob($appRoot . '/vendor/*/*/justtexts-plugin.js') as $file) {
+            $content .= $this->environment->getFileSystem()->getFile($file);
         }
+        $this->environment->sendResult('200 Ok', 'text/javascript; charset=utf-8', $content);
     }
 }
