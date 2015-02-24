@@ -27,6 +27,12 @@ class Text extends RestService
     private $languages;
 
     /**
+     * Name of text model class
+     * @var string
+     */
+    private $textModel;
+
+    /**
      * Initialize private variables.
      *
      * @param SystemEnvironmentInterface $environment
@@ -38,6 +44,7 @@ class Text extends RestService
         $this->appRoot = $bootstrap->getAppRoot();
         $config = $bootstrap->getConfiguration();
         $this->languages = $config['languages'];
+        $this->textModel = !empty($config['textModel']) ? $config['textModel'] : '\\justso\\justtexts\\model\\Text';
     }
 
     /**
@@ -52,7 +59,7 @@ class Text extends RestService
         }
         $pageName = $matches[1];
         $language = $matches[2];
-        $pageTexts = new model\Text($this->environment->getFileSystem(), $pageName, $this->appRoot, $this->languages);
+        $pageTexts = $this->getTextModel($pageName);
         if (empty($matches[4])) {
             $result = array_values($pageTexts->getTextsWithBaseTexts($language));
         } else {
@@ -78,8 +85,7 @@ class Text extends RestService
         $content = $request->getParam('content', '');
 
         try {
-            $fs = $this->environment->getFileSystem();
-            $pageTexts = new model\Text($fs, $pageName, $this->appRoot, $this->languages);
+            $pageTexts = $this->getTextModel($pageName);
             $text = $pageTexts->addTextContainer($name, $content, $language);
             $this->environment->sendJSONResult($text);
         } catch (\Exception $e) {
@@ -104,8 +110,7 @@ class Text extends RestService
         $content = $request->getParam('content', '');
 
         try {
-            $fs = $this->environment->getFileSystem();
-            $pageTexts = new model\Text($fs, $pageName, $this->appRoot, $this->languages);
+            $pageTexts = $this->getTextModel($pageName);
             $text = $pageTexts->modifyTextContainer($oldName, $newName, $content, $language);
             $this->environment->sendJSONResult($text);
         } catch (\Exception $e) {
@@ -126,9 +131,18 @@ class Text extends RestService
             throw new InvalidParameterException("Invalid parameters");
         }
         list($dummy, $pageName, $containerName) = $matches;
-        $pageTexts = new model\Text($this->environment->getFileSystem(), $pageName, $this->appRoot, $this->languages);
+        $pageTexts = $this->getTextModel($pageName);
         $pageTexts->deleteTextContainer($containerName);
 
         $this->environment->sendJSONResult('ok');
+    }
+
+    /**
+     * @param string $pageName
+     * @return model\Text
+     */
+    private function getTextModel($pageName)
+    {
+        return new $this->textModel($this->environment->getFileSystem(), $pageName, $this->appRoot, $this->languages);
     }
 }

@@ -17,18 +17,19 @@ use justso\justapi\FileSystemInterface;
  */
 class Text
 {
-    private $languages = null;
-    private $baseLang;
-    private $extraLangs;
-    private $baseDir;
-    private $outdatedDir;
+    protected $languages = null;
+    protected $baseLang;
+    protected $extraLangs;
+    protected $baseDir;
+    protected $outdatedDir;
+
     /**
      * @var FileSystemInterface
      */
-    private $fs;
+    protected $fs;
 
-    private $pageName;
-    private $contents = array();
+    protected $pageName;
+    protected $contents = array();
 
     /**
      * Initializes a text page.
@@ -56,7 +57,7 @@ class Text
      * @param string $language language code
      * @return array
      */
-    private function readFileContents($language)
+    protected function readFileContents($language)
     {
         $fileName = $this->getFileName($language);
         if (!$this->fs->fileExists($fileName)) {
