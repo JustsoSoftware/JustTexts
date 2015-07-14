@@ -1,3 +1,6 @@
+body, html {
+  height: 100%;
+}
 body {
   padding: 0 10px 0;
 }
@@ -10,10 +13,19 @@ body {
   margin: 8px 10px 0 0;
 }
 
+#content {
+  height: 100%;
+  overflow: hidden;
+  padding-top: 70px;
+  margin-top: -70px;
+}
+
 #page-list-container,
 #page-texts-container {
   display: inline-block;
   vertical-align: top;
+  height: 100%;
+  overflow: hidden;
 }
 
 #pages,
@@ -49,6 +61,9 @@ body {
 }
 
 #pages {
+  height: 90%;
+  overflow: auto;
+
   .list-group-item {
     span {
       width: 150px;

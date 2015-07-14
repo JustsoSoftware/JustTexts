@@ -1,3 +1,6 @@
+body, html {
+  height: 100%; }
+
 body {
   padding: 0 10px 0; }
 
@@ -7,10 +10,18 @@ body {
 #language-switch-container {
   margin: 8px 10px 0 0; }
 
+#content {
+  height: 100%;
+  overflow: hidden;
+  padding-top: 70px;
+  margin-top: -70px; }
+
 #page-list-container,
 #page-texts-container {
   display: inline-block;
-  vertical-align: top; }
+  vertical-align: top;
+  height: 100%;
+  overflow: hidden; }
 
 #pages .list-group-item,
 #page-texts .list-group-item {
@@ -37,15 +48,18 @@ body {
     visibility: hidden;
     margin-top: -5px; }
 
-#pages .list-group-item span {
-  width: 150px; }
-  #pages .list-group-item span:last-of-type {
-    width: auto; }
-#pages span:focus {
-  background: #fff none;
-  color: #000;
-  text-shadow: none;
-  outline-color: #fff; }
+#pages {
+  height: 90%;
+  overflow: auto; }
+  #pages .list-group-item span {
+    width: 150px; }
+    #pages .list-group-item span:last-of-type {
+      width: auto; }
+  #pages span:focus {
+    background: #fff none;
+    color: #000;
+    text-shadow: none;
+    outline-color: #fff; }
 
 #page-texts .list-group-item .name {
   width: 150px; }
@@ -65,5 +79,3 @@ body {
 #add-new-page,
 #add-new-text {
   display: block; }
-
-/*# sourceMappingURL=justso.css.map */
