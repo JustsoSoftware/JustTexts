@@ -83,7 +83,8 @@ class PageServiceTest extends ServiceTestBase
         $mockBuilder = $this->getMockBuilder('\\justso\\justtexts\\model\\PageList');
         $mockBuilder->setConstructorArgs(array(array('abc', 'def')));
         $pageList = $mockBuilder->getMock();
-        $pageList->expects($this->once())->method('changePageFromRequest')->with('test', $request)->will($this->returnValue($page));
+        $pageList->expects($this->once())->method('changePageFromRequest')->with('test', $request)
+            ->will($this->returnValue($page));
         $service = new Page($env);
         $service->setName('/page/abc');
         $service->setPageList($pageList);

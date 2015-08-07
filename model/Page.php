@@ -19,7 +19,7 @@ class Page
 {
     protected $name;
 
-    public function __construct($id=null, $value=null, RequestHelper $request=null)
+    public function __construct($id = null, $value = null, RequestHelper $request = null)
     {
         if ($request !== null) {
             $this->name = $request->getIdentifierParam('name');

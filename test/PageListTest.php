@@ -8,6 +8,7 @@
  */
 
 namespace justso\justtexts\test;
+
 use justso\justapi\Bootstrap;
 use justso\justapi\RequestHelper;
 use justso\justtexts\model\PageList;
