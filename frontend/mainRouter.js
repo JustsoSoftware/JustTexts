@@ -85,7 +85,7 @@ define([
                 },
                 blurHandler = function ($domObj, view, setFunction) {
                     var model = getModel($domObj, view),
-                        valid = setfunction (model);
+                        valid = setFunction(model);
 
                     if (model.changedAttributes() && valid) {
                         model.save().fail(showError);
