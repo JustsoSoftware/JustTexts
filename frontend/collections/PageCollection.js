@@ -7,7 +7,11 @@
  * @package    Generator
  */
 
-define([ "jquery", "backbone", "models/Page" ], function($, Backbone, Page) {
+/* global define */
+
+define([ "jquery", "backbone", "models/Page" ], function ($, Backbone, Page) {
+    'use strict';
+
     return Backbone.Collection.extend({
         model: Page,
         url: "/api/justtexts/page"

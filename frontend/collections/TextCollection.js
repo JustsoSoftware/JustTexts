@@ -7,11 +7,15 @@
  * @package    Generator
  */
 
-define([ "jquery", "backbone", "models/Text" ], function($, Backbone, Text) {
+/* global define */
+
+define([ "jquery", "backbone", "models/Text" ], function ($, Backbone, Text) {
+    'use strict';
+
     return Backbone.Collection.extend({
         model: Text,
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.url = '/api/justtexts/page/' + options.page + '/text/' + options.language;
         }
     });

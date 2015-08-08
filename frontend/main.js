@@ -7,12 +7,13 @@
  * @package    Generator
  */
 
+/* global require, window */
+
 require.config({
     waitSeconds: 30,
     baseUrl: ".",
     paths: {
         "jquery":       "/vendor/jquery-1.11.2.min",
-        "jquerymobile": "/vendor/jquery-mobile/jquery.mobile-1.4.3.min",
         "underscore":   "/vendor/underscore-min",
         "backbone":     "/vendor/backbone-min",
         "text":         "/vendor/text",
@@ -27,7 +28,9 @@ require.config({
     }
 });
 
-require([ "jquery", "backbone", "mainRouter" ], function($, Backbone, Router) {
+require([ "jquery", "backbone", "mainRouter" ], function ($, Backbone, Router) {
+    'use strict';
+
     // Instantiates a new Backbone.js Router
-    this.router = new Router();
+    window.router = new Router();
 });

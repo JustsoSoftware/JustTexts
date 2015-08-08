@@ -7,7 +7,12 @@
  * @package    Generator
  */
 
-define([ "jquery", "backbone", "text!templates/TextEntry.html" ], function($, Backbone, template) {
+/* global define */
+/* jslint nomen: true */
+
+define([ "jquery", "backbone", "underscore", "text!templates/TextEntry.html" ], function($, Backbone, _, template) {
+    'use strict';
+
     var compiled = _.template(template);
 
     return Backbone.View.extend({

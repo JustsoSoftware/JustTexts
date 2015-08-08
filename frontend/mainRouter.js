@@ -10,9 +10,16 @@
 /* global require, define, jQuery, alert, confirm */
 /*jslint nomen: true */
 
-define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", "models/Page",
-        "collections/TextCollection", "views/TextView", "models/Text"],
-    function($, Backbone, messages, PageCollection, Page, TextCollection, TextView, Text) {
+define([
+    "jquery",
+    "backbone",
+    "i18n!nls/messages",
+    "collections/PageCollection",
+    "models/Page",
+    "collections/TextCollection",
+    "views/TextView",
+    "models/Text"
+], function ($, Backbone, messages, PageCollection, Page, TextCollection, TextView, Text) {
     'use strict';
 
     var pageListView,
