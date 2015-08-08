@@ -7,9 +7,14 @@
  * @package    Generator
  */
 
+/* global require, define, jQuery, alert, confirm */
+/*jslint nomen: true */
+
 define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", "models/Page",
         "collections/TextCollection", "views/TextView", "models/Text"],
     function($, Backbone, messages, PageCollection, Page, TextCollection, TextView, Text) {
+    'use strict';
+
     var pageListView,
         pageList = $("#pages"),
         textsList = $("#page-texts"),
@@ -43,9 +48,9 @@ define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", 
         index: function() {
             var currentPage,
                 self = this,
-                setListenHandler = function(listView, viewClass, container) {
+                setListenHandler = function(listView, ViewClass, container) {
                     self.listenTo(listView.collection, 'add', function(model) {
-                        var entryView = new viewClass({ model: model });
+                        var entryView = new ViewClass({ model: model });
                         container.append(entryView.render(model));
                     });
                     self.listenTo(listView.collection, 'destroy', function(model) {
@@ -92,7 +97,7 @@ define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", 
                 showTextList(pageList.find('li.active').attr("id"));
             });
 
-            pageListView = new Backbone.View({ container: pageList, collection: new PageCollection });
+            pageListView = new Backbone.View({ container: pageList, collection: new PageCollection() });
             $.getScript("/api/justtexts/loadPlugins")
                 .then(function() {
                     require(["views/PageView"], function(PageView) {
@@ -119,7 +124,9 @@ define(["jquery","backbone", "i18n!nls/messages", "collections/PageCollection", 
                         $.each(variables, function() {
                             var val = $(this).text().trim();
                             model.set($(this).attr("class"), val);
+                            /*jslint bitwise: true*/
                             allSet &= !!val;
+                            /*jslint bitwise: false*/
                         });
                         return allSet;
                     });
