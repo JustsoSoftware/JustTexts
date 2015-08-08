@@ -10,7 +10,7 @@
 /* global define */
 /* jslint nomen: true */
 
-define([ "jquery", "backbone", "underscore", "text!templates/TextEntry.html" ], function($, Backbone, _, template) {
+define([ "jquery", "backbone", "underscore", "text!templates/TextEntry.html" ], function ($, Backbone, _, template) {
     'use strict';
 
     var compiled = _.template(template);
@@ -19,11 +19,11 @@ define([ "jquery", "backbone", "underscore", "text!templates/TextEntry.html" ], 
         tagName: 'li',
         className: "list-group-item",
 
-        initialize: function() {
+        initialize: function () {
             this.model.on('change', this.render, this);
         },
 
-        render: function(text) {
+        render: function (text) {
             this.$el.attr("id", text.cid);
             this.$el.html(compiled(text.attributes));
             return this.el;
