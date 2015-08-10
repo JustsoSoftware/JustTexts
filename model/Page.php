@@ -15,7 +15,7 @@ use justso\justapi\RequestHelper;
  * Class Page
  * @package justso\justtexts\model
  */
-class Page
+class Page implements PageInterface
 {
     protected $name;
 
