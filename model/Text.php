@@ -15,7 +15,7 @@ use justso\justapi\FileSystemInterface;
  * Class Text
  * @package justso\model
  */
-class Text
+class Text implements TextInterface
 {
     protected $languages = null;
     protected $baseLang;
