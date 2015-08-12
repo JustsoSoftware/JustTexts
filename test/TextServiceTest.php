@@ -11,8 +11,8 @@ namespace justso\justtexts\test;
 
 use justso\justapi\Bootstrap;
 use justso\justapi\RestService;
-use justso\justapi\test\ServiceTestBase;
-use justso\justapi\test\TestEnvironment;
+use justso\justapi\testutil\ServiceTestBase;
+use justso\justapi\testutil\TestEnvironment;
 use justso\justtexts\service\Text;
 
 /**
@@ -42,7 +42,7 @@ class TextServiceTest extends ServiceTestBase
         );
         Bootstrap::getInstance()->setTestConfiguration('/test-root', $config);
 
-        /** @var \justso\justapi\test\FileSystemSandbox $sandbox */
+        /** @var \justso\justapi\testutil\FileSystemSandbox $sandbox */
         $sandbox = $this->env->getFileSystem();
         $this->indexFileName = '/test-root/htdocs/nls/index.js';
         $sandbox->putFile('/test-root/htdocs/nls/empty.js', 'define({"root":{}});');
@@ -54,7 +54,7 @@ class TextServiceTest extends ServiceTestBase
     public function tearDown()
     {
         parent::tearDown();
-        /** @var \justso\justapi\test\FileSystemSandbox $sandbox */
+        /** @var \justso\justapi\testutil\FileSystemSandbox $sandbox */
         $sandbox = $this->env->getFileSystem();
         $protocol = $sandbox->getProtocol();
         if (!empty($protocol)) {

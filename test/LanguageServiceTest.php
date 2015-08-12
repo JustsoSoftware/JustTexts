@@ -10,7 +10,7 @@
 namespace justso\justtexts\test;
 
 use justso\justapi\Bootstrap;
-use justso\justapi\test\ServiceTestBase;
+use justso\justapi\testutil\ServiceTestBase;
 use justso\justtexts\service\Language;
 
 /**

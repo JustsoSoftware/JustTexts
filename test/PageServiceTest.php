@@ -9,7 +9,7 @@
 
 namespace justso\justtexts\test;
 
-use justso\justapi\test\ServiceTestBase;
+use justso\justapi\testutil\ServiceTestBase;
 use justso\justtexts\model\PageList;
 use justso\justtexts\service\Page;
 

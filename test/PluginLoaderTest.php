@@ -10,9 +10,9 @@
 namespace justso\justtexts\test;
 
 use justso\justapi\Bootstrap;
-use justso\justapi\test\ServiceTestBase;
-use justso\justapi\test\FileSystemSandbox;
-use justso\justapi\test\TestEnvironment;
+use justso\justapi\testutil\ServiceTestBase;
+use justso\justapi\testutil\FileSystemSandbox;
+use justso\justapi\testutil\TestEnvironment;
 use justso\justtexts\service\PluginLoader;
 
 /**
