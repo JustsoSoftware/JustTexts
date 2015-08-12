@@ -110,7 +110,7 @@ class PageList
     public function renamePage($id, $newName)
     {
         $this->pages[$newName] = $this->getPage($id);
-        unset ($this->pages[$id]);
+        unset($this->pages[$id]);
         $this->persist();
     }
 
@@ -122,7 +122,7 @@ class PageList
     public function deletePage($id)
     {
         $this->getPage($id);
-        unset ($this->pages[$id]);
+        unset($this->pages[$id]);
         $this->persist();
     }
 
