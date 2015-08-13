@@ -13,11 +13,11 @@ require.config({
     waitSeconds: 30,
     baseUrl: ".",
     paths: {
-        "jquery":       "/vendor/jquery-1.11.2.min",
-        "underscore":   "/vendor/underscore-min",
-        "backbone":     "/vendor/backbone-min",
-        "text":         "/vendor/text",
-        "i18n":         "/vendor/i18n"
+        "jquery":     "/components/jquery/jquery.min",
+        "underscore": "/components/underscore/underscore-min",
+        "backbone":   "/components/backbone/backbone-min",
+        "text":       "/vendor/text",
+        "i18n":       "/vendor/i18n"
     },
 
     shim: {
