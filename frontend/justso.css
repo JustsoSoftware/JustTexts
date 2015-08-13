@@ -23,43 +23,44 @@ body {
   height: 100%;
   overflow: hidden; }
 
-#pages .list-group-item,
-#page-texts .list-group-item {
-  padding: 3px 0 0 15px;
-  line-height: 2em; }
-  #pages .list-group-item:hover,
-  #page-texts .list-group-item:hover {
-    background-color: #eee; }
-    #pages .list-group-item:hover .delete,
-    #page-texts .list-group-item:hover .delete {
-      visibility: visible; }
-  #pages .list-group-item span,
-  #page-texts .list-group-item span {
-    display: inline-block;
-    min-height: 1.4em;
-    line-height: 1.4em;
-    margin: 2px 0;
-    vertical-align: top; }
-  #pages .list-group-item span:first-of-type,
-  #page-texts .list-group-item span:first-of-type {
-    margin-right: 20px; }
-  #pages .list-group-item .delete,
-  #page-texts .list-group-item .delete {
-    visibility: hidden;
-    margin-top: -5px; }
-
-#pages {
+#pages,
+#page-texts {
   height: 90%;
   overflow: auto; }
-  #pages .list-group-item span {
-    width: 150px; }
-    #pages .list-group-item span:last-of-type {
-      width: auto; }
-  #pages span:focus {
-    background: #fff none;
-    color: #000;
-    text-shadow: none;
-    outline-color: #fff; }
+  #pages .list-group-item,
+  #page-texts .list-group-item {
+    padding: 3px 0 0 15px;
+    line-height: 2em; }
+    #pages .list-group-item:hover,
+    #page-texts .list-group-item:hover {
+      background-color: #eee; }
+      #pages .list-group-item:hover .delete,
+      #page-texts .list-group-item:hover .delete {
+        visibility: visible; }
+    #pages .list-group-item span,
+    #page-texts .list-group-item span {
+      display: inline-block;
+      min-height: 1.4em;
+      line-height: 1.4em;
+      margin: 2px 0;
+      vertical-align: top; }
+    #pages .list-group-item span:first-of-type,
+    #page-texts .list-group-item span:first-of-type {
+      margin-right: 20px; }
+    #pages .list-group-item .delete,
+    #page-texts .list-group-item .delete {
+      visibility: hidden;
+      margin-top: -5px; }
+
+#pages .list-group-item span {
+  width: 150px; }
+  #pages .list-group-item span:last-of-type {
+    width: auto; }
+#pages span:focus {
+  background: #fff none;
+  color: #000;
+  text-shadow: none;
+  outline-color: #fff; }
 
 #page-texts .list-group-item .name {
   width: 150px; }

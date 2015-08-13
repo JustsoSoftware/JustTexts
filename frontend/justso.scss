@@ -30,6 +30,9 @@ body {
 
 #pages,
 #page-texts {
+  height: 90%;
+  overflow: auto;
+
   .list-group-item {
     padding: 3px 0 0 15px;
     line-height: 2em;
@@ -61,9 +64,6 @@ body {
 }
 
 #pages {
-  height: 90%;
-  overflow: auto;
-
   .list-group-item {
     span {
       width: 150px;
