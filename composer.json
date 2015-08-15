@@ -1,0 +1,25 @@
+{
+  "name": "justso/justtexts",
+  "type": "library",
+  "description": "Simple administration of multi-language (i18n) texts via Web Browser.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Joachim Schirrmacher",
+      "email": "j.schirrmacher@justso.de",
+      "homepage": "http://digital-wachsen.de",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "components/jquery": "1.11.x",
+    "components/backbone": "1.1.x",
+    "components/bootstrap": "3.3.x",
+    "components/underscore": "1.7.x",
+    "justso/justapi": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.x"
+  }
+}
