@@ -12,7 +12,6 @@ body {
 
 #content {
   height: 100%;
-  overflow: hidden;
   padding-top: 70px;
   margin-top: -70px; }
 
@@ -80,3 +79,5 @@ body {
 #add-new-page,
 #add-new-text {
   display: block; }
+
+/*# sourceMappingURL=justso.css.map */
