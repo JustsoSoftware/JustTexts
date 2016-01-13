@@ -86,7 +86,7 @@ class Text extends RestService
 
         try {
             $pageTexts = $this->getTextModel($pageName);
-            $text = $pageTexts->addTextContainer($name, $content, $language);
+            $text = $pageTexts->addTextContainer($name, $this->filter($content), $language);
             $this->environment->sendJSONResult($text);
         } catch (\Exception $e) {
             throw new InvalidParameterException($e->getMessage());
@@ -111,7 +111,7 @@ class Text extends RestService
 
         try {
             $pageTexts = $this->getTextModel($pageName);
-            $text = $pageTexts->modifyTextContainer($oldName, $newName, $content, $language);
+            $text = $pageTexts->modifyTextContainer($oldName, $newName, $this->filter($content), $language);
             $this->environment->sendJSONResult($text);
         } catch (\Exception $e) {
             throw new InvalidParameterException($e->getMessage());
@@ -144,5 +144,16 @@ class Text extends RestService
     private function getTextModel($pageName)
     {
         return new $this->textModel($this->environment->getFileSystem(), $pageName, $this->appRoot, $this->languages);
+    }
+
+    /**
+     * Filters out unwanted html code like formatting and so on
+     *
+     * @param string $content
+     * @return string
+     */
+    private function filter($content)
+    {
+        return strip_tags($content, '<p><br>');
     }
 }
