@@ -22,12 +22,12 @@ class LanguageServiceTest extends ServiceTestBase
 
     public function testGetLanguages()
     {
+        $env = $this->createTestEnvironment();
         $config = array(
             'environments' => array('test' => array('approot' => '/var/www')),
             'languages' => array('de', 'en'),
         );
-        Bootstrap::getInstance()->setTestConfiguration('/var/www', $config);
-        $env = $this->createTestEnvironment();
+        $env->getBootstrap()->setTestConfiguration('/var/www', $config);
         $service = new Language($env);
         $service->getAction();
         $this->assertJSONHeader($env);
