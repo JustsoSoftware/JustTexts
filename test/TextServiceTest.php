@@ -23,11 +23,6 @@ class TextServiceTest extends ServiceTestBase
 {
     const TEST_TEXT = '{"id":"Test","name":"Test","content":"Hallo Welt!","outdated":true}';
 
-    /**
-     * @var TestEnvironment
-     */
-    private $env;
-
     private $indexFileName;
 
     protected function setUp()
