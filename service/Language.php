@@ -9,7 +9,6 @@
 
 namespace justso\justtexts\service;
 
-use justso\justapi\Bootstrap;
 use justso\justapi\RestService;
 
 /**
@@ -20,7 +19,7 @@ class Language extends RestService
 {
     public function getAction()
     {
-        $config = Bootstrap::getInstance()->getConfiguration();
+        $config = $this->environment->getBootstrap()->getConfiguration();
         $this->environment->sendJSONResult($config['languages']);
     }
 }
