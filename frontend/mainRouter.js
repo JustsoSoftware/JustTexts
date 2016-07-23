@@ -7,7 +7,7 @@
  * @package    Generator
  */
 
-/* global require, define, jQuery, alert, confirm */
+/* global require, define, alert, confirm */
 /*jslint nomen: true */
 
 define([
@@ -132,7 +132,7 @@ define([
                             var val = $(this).text().trim();
                             model.set($(this).attr("class"), val);
                             /*jslint bitwise: true*/
-                            allSet &= !!val;
+                            allSet &= !!val;    // eslint-disable-line no-bitwise
                             /*jslint bitwise: false*/
                         });
                         return allSet;
@@ -152,19 +152,20 @@ define([
                     var $li = $(this);
                     blurHandler($li, textListView, function (model) {
                         var nameField = $li.find(".name"),
-                            name = nameField.text().trim();
+                            name = nameField.text().trim(),
+                            result = false;
 
                         if (!name.match(/^\w+$/)) {
                             alert("Illegal characters in text block name. Can only use a-z and '_'. All other characters are removed.");
                             nameField.text(name.replace(/\W/, ""));
-                            return false;
                         } else {
                             model.set({
                                 name: name,
                                 content: $li.find(".content").html()
                             });
-                            return model.get("name");
+                            result = model.get("name");
                         }
+                        return result;
                     });
                 })
                 .on("click", ".delete", function () {

@@ -8,8 +8,7 @@
  */
 
 /* global define */
-
-define([ "jquery", "backbone" ], function ($, Backbone) {
+define([ "jquery", "backbone", "underscore" ], function ($, Backbone, _) {
     'use strict';
 
     var compiled = _.template($("#PageEntry").html());
