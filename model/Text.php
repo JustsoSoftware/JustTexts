@@ -63,7 +63,7 @@ class Text implements TextInterface
         if (!$this->fs->fileExists($fileName)) {
             return array();
         }
-        $content = json_decode(preg_replace('/^define\((.*)\);/s', '$1', $this->fs->getFile($fileName)), true);
+        $content = json_decode(preg_replace('/^.*?define\((.*)\);\s*/s', '$1', $this->fs->getFile($fileName)), true);
         if ($language === $this->baseLang) {
             $content = $content['root'];
         }
@@ -100,7 +100,8 @@ class Text implements TextInterface
             $content = $textInfo;
         }
         $encodeFlags = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES;
-        $this->fs->putFile($this->getFileName($language), 'define(' . json_encode($content, $encodeFlags) . ');');
+        $content = "/*global define*/\ndefine(" . json_encode($content, $encodeFlags) . ");\n";
+        $this->fs->putFile($this->getFileName($language), $content);
         $this->fs->putFile($this->getOutdateInfoFileName($language), json_encode($outdateInfo, $encodeFlags));
     }
 
