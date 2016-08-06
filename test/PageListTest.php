@@ -7,11 +7,11 @@
  * @package    justso\justtexts\test
  */
 
-namespace justso\justtexts\test;
+namespace justso\justtexts;
 
 use justso\justapi\Bootstrap;
 use justso\justapi\RequestHelper;
-use justso\justtexts\model\PageList;
+use justso\justapi\testutil\TestEnvironment;
 
 /**
  * Class PageListTest
@@ -35,9 +35,9 @@ class PageListTest extends \PHPUnit_Framework_TestCase
             'languages' => array('de'),
             'pages' => array('abc', 'def')
         );
-        Bootstrap::getInstance()->setTestConfiguration('/tmp', $config);
-
-        $this->list = new PageList(array('abc', 'def'));
+        $env = new TestEnvironment(new RequestHelper());
+        $env->getBootstrap()->setTestConfiguration('/tmp', $config);
+        $this->list = new PageList($env);
     }
 
     /**
@@ -60,7 +60,7 @@ class PageListTest extends \PHPUnit_Framework_TestCase
     public function testGetPage()
     {
         $page = $this->list->getPage('abc');
-        $this->assertSame('justso\\justtexts\\model\\Page', get_class($page));
+        $this->assertSame('justso\justtexts\Page', get_class($page));
         $this->assertSame('abc', $page->getId());
     }
 
@@ -71,7 +71,7 @@ class PageListTest extends \PHPUnit_Framework_TestCase
         $this->list->addPageFromRequest('ghi', $request);
         $this->assertEquals(array('abc', 'def', 'ghi'), $this->list->getPages());
         $page = $this->list->getPage('ghi');
-        $this->assertSame('justso\\justtexts\\model\\Page', get_class($page));
+        $this->assertSame('justso\justtexts\Page', get_class($page));
         $this->assertSame('ghi', $page->getId());
     }
 
@@ -82,7 +82,7 @@ class PageListTest extends \PHPUnit_Framework_TestCase
         $this->list->changePageFromRequest('def', $request);
         $this->assertEquals(array('abc', 'def'), $this->list->getPages());
         $page = $this->list->getPage('def');
-        $this->assertSame('justso\\justtexts\\model\\Page', get_class($page));
+        $this->assertSame('justso\justtexts\Page', get_class($page));
         $this->assertSame('def', $page->getId());
     }
 
@@ -91,7 +91,7 @@ class PageListTest extends \PHPUnit_Framework_TestCase
         $this->list->renamePage('def', 'ghi');
         $this->assertEquals(array('abc', 'ghi'), $this->list->getPages());
         $page = $this->list->getPage('ghi');
-        $this->assertSame('justso\\justtexts\\model\\Page', get_class($page));
+        $this->assertSame('justso\justtexts\Page', get_class($page));
     }
 
     public function testDeletePage()

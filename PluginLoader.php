@@ -7,23 +7,22 @@
  * @package    justso\justtexts\service
  */
 
-namespace justso\justtexts\service;
+namespace justso\justtexts;
 
-use justso\justapi\Bootstrap;
 use justso\justapi\RestService;
 
 /**
  * Class PluginLoader
- * @package justso\justtexts\service
  */
 class PluginLoader extends RestService
 {
     public function getAction()
     {
-        $appRoot = Bootstrap::getInstance()->getAppRoot();
+        $appRoot = $this->environment->getBootstrap()->getAppRoot();
         $content = '';
-        foreach ($this->environment->getFileSystem()->glob($appRoot . '/vendor/*/*/justtexts-plugin.js') as $file) {
-            $content .= $this->environment->getFileSystem()->getFile($file);
+        $fs = $this->environment->getFileSystem();
+        foreach ($fs->glob($appRoot . '/vendor/*/*/justtexts-plugin.js') as $file) {
+            $content .= $fs->getFile($file);
         }
         $this->environment->sendResult('200 Ok', 'text/javascript; charset=utf-8', $content);
     }

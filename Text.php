@@ -7,9 +7,9 @@
  * @package    justso\model
  */
 
-namespace justso\justtexts\model;
+namespace justso\justtexts;
 
-use justso\justapi\FileSystemInterface;
+use justso\justapi\SystemEnvironmentInterface;
 
 /**
  * Class Text
@@ -24,9 +24,9 @@ class Text implements TextInterface
     protected $outdatedDir;
 
     /**
-     * @var FileSystemInterface
+     * @var SystemEnvironmentInterface
      */
-    protected $fs;
+    protected $env;
 
     protected $pageName;
     protected $contents = array();
@@ -34,18 +34,19 @@ class Text implements TextInterface
     /**
      * Initializes a text page.
      *
-     * @param FileSystemInterface $fs
+     * @param SystemEnvironmentInterface $env
      * @param string $pageName Name of page
-     * @param string $appRoot Path where application is installed
-     * @param string[] $languages List of short codes
      */
-    public function __construct(FileSystemInterface $fs, $pageName, $appRoot, $languages)
+    public function __construct(SystemEnvironmentInterface $env, $pageName)
     {
+        $this->env = $env;
         $this->pageName = $pageName;
-        $this->fs = $fs;
         if ($this->languages === null) {
-            $this->extraLangs = $this->languages = $languages;
+            $bootstrap = $env->getBootstrap();
+            $configuration = $bootstrap->getConfiguration();
+            $this->extraLangs = $this->languages = $configuration['languages'];
             $this->baseLang = array_shift($this->extraLangs);
+            $appRoot = $bootstrap->getAppRoot();
             $this->baseDir = $appRoot . '/htdocs/nls/';
             $this->outdatedDir = $appRoot . '/content/outdateInfo/';
         }
@@ -60,17 +61,18 @@ class Text implements TextInterface
     protected function readFileContents($language)
     {
         $fileName = $this->getFileName($language);
-        if (!$this->fs->fileExists($fileName)) {
+        $fs = $this->env->getFileSystem();
+        if (!$fs->fileExists($fileName)) {
             return array();
         }
-        $content = json_decode(preg_replace('/^.*?define\((.*)\);\s*/s', '$1', $this->fs->getFile($fileName)), true);
+        $content = json_decode(preg_replace('/^.*?define\((.*)\);\s*/s', '$1', $fs->getFile($fileName)), true);
         if ($language === $this->baseLang) {
             $content = $content['root'];
         }
 
         $fileName = $this->getOutdateInfoFileName($language);
-        if ($this->fs->fileExists($fileName)) {
-            $outdateInfo = json_decode($this->fs->getFile($fileName), true);
+        if ($fs->fileExists($fileName)) {
+            $outdateInfo = json_decode($fs->getFile($fileName), true);
         } else {
             $outdateInfo = array_fill_keys(array_keys($content), true);
         }
@@ -101,8 +103,9 @@ class Text implements TextInterface
         }
         $encodeFlags = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES;
         $content = "/*global define*/\ndefine(" . json_encode($content, $encodeFlags) . ");\n";
-        $this->fs->putFile($this->getFileName($language), $content);
-        $this->fs->putFile($this->getOutdateInfoFileName($language), json_encode($outdateInfo, $encodeFlags));
+        $fs = $this->env->getFileSystem();
+        $fs->putFile($this->getFileName($language), $content);
+        $fs->putFile($this->getOutdateInfoFileName($language), json_encode($outdateInfo, $encodeFlags));
     }
 
     /**
@@ -296,11 +299,12 @@ class Text implements TextInterface
      */
     public function removeAll()
     {
-        $this->fs->deleteFile($this->baseDir . $this->pageName . '.js');
-        $this->fs->deleteFile($this->outdatedDir . $this->baseLang . '/' . $this->pageName . '.json');
+        $fs = $this->env->getFileSystem();
+        $fs->deleteFile($this->baseDir . $this->pageName . '.js');
+        $fs->deleteFile($this->outdatedDir . $this->baseLang . '/' . $this->pageName . '.json');
         foreach ($this->extraLangs as $language) {
-            $this->fs->deleteFile($this->baseDir . $language . '/' . $this->pageName . '.js');
-            $this->fs->deleteFile($this->outdatedDir . $language . '/' . $this->pageName . '.json');
+            $fs->deleteFile($this->baseDir . $language . '/' . $this->pageName . '.js');
+            $fs->deleteFile($this->outdatedDir . $language . '/' . $this->pageName . '.json');
         }
     }
 }

@@ -7,7 +7,7 @@
  * @package    justso\justtexts\model
  */
 
-namespace justso\justtexts\model;
+namespace justso\justtexts;
 
 use justso\justapi\RequestHelper;
 

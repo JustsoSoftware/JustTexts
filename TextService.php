@@ -8,29 +8,21 @@
  * @package    justso\service
  */
 
-namespace justso\justtexts\service;
+namespace justso\justtexts;
 
-use justso\justapi\Bootstrap;
 use justso\justapi\InvalidParameterException;
 use justso\justapi\RestService;
 use justso\justapi\SystemEnvironmentInterface;
-use justso\justtexts\model;
 
 /**
  * Handles requests regarding website page texts.
  *
  * @package    justso\service
  */
-class Text extends RestService
+class TextService extends RestService
 {
     private $appRoot;
     private $languages;
-
-    /**
-     * Name of text model class
-     * @var string
-     */
-    private $textModel;
 
     /**
      * Initialize private variables.
@@ -40,11 +32,10 @@ class Text extends RestService
     public function __construct(SystemEnvironmentInterface $environment)
     {
         parent::__construct($environment);
-        $bootstrap = Bootstrap::getInstance();
+        $bootstrap = $environment->getBootstrap();
         $this->appRoot = $bootstrap->getAppRoot();
         $config = $bootstrap->getConfiguration();
         $this->languages = $config['languages'];
-        $this->textModel = !empty($config['textModel']) ? $config['textModel'] : '\\justso\\justtexts\\model\\Text';
     }
 
     /**
@@ -139,11 +130,14 @@ class Text extends RestService
 
     /**
      * @param string $pageName
-     * @return model\Text
+     * @return Text
      */
     private function getTextModel($pageName)
     {
-        return new $this->textModel($this->environment->getFileSystem(), $pageName, $this->appRoot, $this->languages);
+        return $this->environment->getDIC()->get('\justso\justtexts\Text', [
+            $this->environment,
+            $pageName
+        ]);
     }
 
     /**

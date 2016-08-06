@@ -7,11 +7,12 @@
  * @package    justso\justtexts\model
  */
 
-namespace justso\justtexts\model;
+namespace justso\justtexts;
 
 use justso\justapi\Bootstrap;
 use justso\justapi\InvalidParameterException;
 use justso\justapi\RequestHelper;
+use justso\justapi\SystemEnvironmentInterface;
 
 /**
  * Class PageList
@@ -20,29 +21,36 @@ use justso\justapi\RequestHelper;
 class PageList
 {
     /**
-     * Name of page model class
-     * @var string
-     */
-    private $pageModel;
-
-    /**
      * List of pages
      * @var Page[]
      */
     private $pages;
 
+    /** @var SystemEnvironmentInterface */
+    private $env;
+
     /**
      * Initializes the page list
      */
-    public function __construct($pageConfig = array(), $pageModel = null)
+    public function __construct(SystemEnvironmentInterface $env)
     {
-        $this->pageModel = $pageModel ?: '\\justso\\justtexts\\model\\Page';
+        $this->env = $env;
         $this->pages = array();
-        foreach ($pageConfig as $key => $value) {
-            /** @var \justso\justtexts\model\Page $page */
-            $page = new $this->pageModel($key, $value);
+        $configuration = $env->getBootstrap()->getConfiguration();
+        foreach ($configuration['pages'] as $key => $value) {
+            $page = $this->createPageObject($key, $value);
             $this->pages[$page->getId()] = $page;
         }
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     * @return \justso\justtexts\PageInterface
+     */
+    private function createPageObject($key, $value, RequestHelper $request = null)
+    {
+        return $this->env->getDIC()->get('\justso\justtexts\Page', [$key, $value, $request]);
     }
 
     /**
@@ -79,7 +87,7 @@ class PageList
      */
     public function addPageFromRequest($id, RequestHelper $request)
     {
-        $page = new $this->pageModel(null, null, $request);
+        $page = $this->createPageObject(null, null, $request);
         $this->pages[$id] = $page;
         $this->persist();
         return $page;
@@ -95,7 +103,7 @@ class PageList
     public function changePageFromRequest($id, $request)
     {
         $this->getPage($id);
-        $page = new $this->pageModel(null, null, $request);
+        $page = $this->createPageObject(null, null, $request);
         $this->pages[$id] = $page;
         $this->persist();
         return $page;
@@ -131,11 +139,12 @@ class PageList
      */
     private function persist()
     {
-        $config = Bootstrap::getInstance()->getConfiguration();
+        $bootstrap = Bootstrap::getInstance();
+        $config = $bootstrap->getConfiguration();
         $config['pages'] = array();
         foreach ($this->pages as $page) {
             $page->appendConfig($config['pages']);
         }
-        Bootstrap::getInstance()->setConfiguration($config);
+        $bootstrap->setConfiguration($config);
     }
 }

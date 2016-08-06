@@ -8,22 +8,18 @@
  * @package    justso\service
  */
 
-namespace justso\justtexts\service;
+namespace justso\justtexts;
 
-use justso\justapi\Bootstrap;
 use justso\justapi\InvalidParameterException;
 use justso\justapi\RestService;
 use justso\justapi\SystemEnvironmentInterface;
-use justso\justtexts\model;
-use justso\justtexts\model\PageList;
-use justso\justtexts\model\Text;
 
 /**
  * Handles requests regarding generated website pages.
  *
  * @package    justso\service
  */
-class Page extends RestService
+class PageService extends RestService
 {
     /**
      * @var PageList
@@ -38,8 +34,7 @@ class Page extends RestService
     public function __construct(SystemEnvironmentInterface $environment)
     {
         parent::__construct($environment);
-        $config = Bootstrap::getInstance()->getConfiguration();
-        $this->pageList = new PageList($config['pages'], empty($config['pageModel']) ? null : $config['pageModel']);
+        $this->pageList = new PageList($environment);
     }
 
     /**
@@ -107,10 +102,9 @@ class Page extends RestService
         $id = $this->getPageId();
         $this->pageList->deletePage($id);
 
-        $bootstrap = Bootstrap::getInstance();
-        $config = $bootstrap->getConfiguration();
-        $fs = $this->environment->getFileSystem();
-        $pageTexts = new Text($fs, $id, $bootstrap->getAppRoot(), $config['languages']);
+        $arguments = [$this->environment, $id];
+        /** @var \justso\justtexts\TextInterface $pageTexts */
+        $pageTexts = $this->environment->getDIC()->get('\justso\justtexts\Text', $arguments);
         $pageTexts->removeAll();
 
         $this->environment->sendJSONResult('ok');

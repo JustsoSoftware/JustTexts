@@ -7,21 +7,19 @@
  * @package    justso\justtexts\model
  */
 
-namespace justso\justtexts\model;
+namespace justso\justtexts;
 
-use justso\justapi\FileSystemInterface;
+use justso\justapi\SystemEnvironmentInterface;
 
 interface TextInterface
 {
     /**
      * Initializes a text page.
      *
-     * @param FileSystemInterface $fs
+     * @param SystemEnvironmentInterface $env
      * @param string $pageName Name of page
-     * @param string $appRoot Path where application is installed
-     * @param string[] $languages List of short codes
      */
-    public function __construct(FileSystemInterface $fs, $pageName, $appRoot, $languages);
+    public function __construct(SystemEnvironmentInterface $env, $pageName);
 
     /**
      * Returns all texts of a page in the specified language.

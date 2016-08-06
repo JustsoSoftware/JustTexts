@@ -7,17 +7,12 @@
  * @package    justso\justtexts\test
  */
 
-namespace justso\justtexts\test;
+namespace justso\justtexts;
 
-use justso\justapi\Bootstrap;
-use justso\justapi\RestService;
 use justso\justapi\testutil\ServiceTestBase;
-use justso\justapi\testutil\TestEnvironment;
-use justso\justtexts\service\Text;
 
 /**
  * Class TextServiceTest
- * @package justso\justtexts\test
  */
 class TextServiceTest extends ServiceTestBase
 {
@@ -35,7 +30,7 @@ class TextServiceTest extends ServiceTestBase
             'languages' => array('de'),
             'pages' => array('abc' => 'testTemplate')
         );
-        Bootstrap::getInstance()->setTestConfiguration('/test-root', $config);
+        $this->env->getBootstrap()->setTestConfiguration('/test-root', $config);
 
         /** @var \justso\justapi\testutil\FileSystemSandbox $sandbox */
         $sandbox = $this->env->getFileSystem();
@@ -60,7 +55,7 @@ class TextServiceTest extends ServiceTestBase
 
     public function testGetAllTextsOnEmptyPage()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $service->setName('/page/empty/text/de');
         $service->getAction();
         $this->assertJSONHeader($this->env);
@@ -69,19 +64,19 @@ class TextServiceTest extends ServiceTestBase
 
     public function testGetAllTextsOnNonEmtpyPage()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $this->checkTextContent($service, null, '[' . self::TEST_TEXT . ']');
     }
 
     public function testGetExistingText()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $this->checkTextContent($service, 'Test', self::TEST_TEXT);
     }
 
     public function testGetANonExistingText()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $this->checkTextContent($service, 'abc', 'null');
     }
 
@@ -90,7 +85,7 @@ class TextServiceTest extends ServiceTestBase
      */
     public function testInvalidGet()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $service->setName('/page/index/text/abc/def');
         $service->getAction();
         // @codeCoverageIgnoreStart
@@ -99,7 +94,7 @@ class TextServiceTest extends ServiceTestBase
 
     public function testPostAction()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $this->env->getRequestHelper()->set(array('name' => 'NewText', 'content' => 'NewText content'));
         $service->setName('/page/index/text/de');
         $service->postAction();
@@ -115,7 +110,7 @@ class TextServiceTest extends ServiceTestBase
      */
     public function testInvalidPost()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $service->setName('/page/index/text/abc');
         $service->postAction();
         // @codeCoverageIgnoreStart
@@ -124,7 +119,7 @@ class TextServiceTest extends ServiceTestBase
 
     public function testPutAction()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $this->env->getRequestHelper()->set(array('name' => 'NewText', 'content' => 'NewText content'));
         $service->setName('/page/index/text/de/Test');
         $service->putAction();
@@ -142,7 +137,7 @@ class TextServiceTest extends ServiceTestBase
      */
     public function testInvalidPut()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $service->setName('/page/index/text/abc');
         $service->putAction();
         // @codeCoverageIgnoreStart
@@ -151,7 +146,7 @@ class TextServiceTest extends ServiceTestBase
 
     public function testDeleteAction()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $service->setName('/page/index/text/de/Test');
         $service->deleteAction();
         $this->assertJSONHeader($this->env);
@@ -163,7 +158,7 @@ class TextServiceTest extends ServiceTestBase
      */
     public function testInvalidDelete()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $service->setName('/page/index/text/abc');
         $service->deleteAction();
         // @codeCoverageIgnoreStart
@@ -172,7 +167,7 @@ class TextServiceTest extends ServiceTestBase
 
     public function testPageNamesCanContainHyphens()
     {
-        $service = new Text($this->env);
+        $service = new TextService($this->env);
         $this->env->getRequestHelper()->set(array('name' => 'Text', 'content' => 'Text content'));
         $service->setName('/page/test-page/text/de');
         $service->postAction();
@@ -200,11 +195,11 @@ class TextServiceTest extends ServiceTestBase
     }
 
     /**
-     * @param RestService $service
+     * @param TextService $service
      * @param string      $container
      * @param string      $expected
      */
-    private function checkTextContent(RestService $service, $container, $expected)
+    private function checkTextContent(TextService $service, $container, $expected)
     {
         $this->env->clearResponse();
         $service->setName('/page/index/text/de' . ($container ? '/' . $container : ''));

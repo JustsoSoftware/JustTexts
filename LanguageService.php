@@ -1,21 +1,21 @@
 <?php
 /**
- * Definition of class Language
+ * Definition of class LanguageService
  *
  * @copyright  2014-today Justso GmbH
  * @author     j.schirrmacher@justso.de
  * @package    justso\service
  */
 
-namespace justso\justtexts\service;
+namespace justso\justtexts;
 
 use justso\justapi\RestService;
 
 /**
- * Class Language
+ * Class LanguageService
  * @package justso\service
  */
-class Language extends RestService
+class LanguageService extends RestService
 {
     public function getAction()
     {

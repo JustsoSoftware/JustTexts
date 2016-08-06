@@ -7,13 +7,11 @@
  * @package    justso\justtexts\test
  */
 
-namespace justso\justtexts\test;
+namespace justso\justtexts;
 
-use justso\justapi\Bootstrap;
 use justso\justapi\testutil\ServiceTestBase;
 use justso\justapi\testutil\FileSystemSandbox;
 use justso\justapi\testutil\TestEnvironment;
-use justso\justtexts\service\PluginLoader;
 
 /**
  * Class PluginLoaderTest
@@ -26,7 +24,7 @@ class PluginLoaderTest extends ServiceTestBase
         $env = $this->createTestEnvironment();
         /** @var FileSystemSandbox $sandbox */
         $sandbox = $env->getFileSystem();
-        $appRoot = Bootstrap::getInstance()->getAppRoot();
+        $appRoot = $env->getBootstrap()->getAppRoot();
         $content = 'var test;';
         $sandbox->putFile($appRoot . '/vendor/justso/justtexts/justtexts-plugin.js', $content);
         $this->checkPlugin($env, $content);
@@ -43,7 +41,7 @@ class PluginLoaderTest extends ServiceTestBase
         $env = $this->createTestEnvironment();
         /** @var FileSystemSandbox $sandbox */
         $sandbox = $env->getFileSystem();
-        $appRoot = Bootstrap::getInstance()->getAppRoot();
+        $appRoot = $env->getBootstrap()->getAppRoot();
         $content = array('var test;', 'var test2;');
         $sandbox->putFile($appRoot . '/vendor/justso/test1/justtexts-plugin.js', $content[0]);
         $sandbox->putFile($appRoot . '/vendor/justso/test2/justtexts-plugin.js', $content[1]);

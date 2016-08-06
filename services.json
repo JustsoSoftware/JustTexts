@@ -1,10 +1,10 @@
 {
     "services": {
-        "page/*/text":   "justso\\justtexts\\service\\Text",
-        "page/*/text/*": "justso\\justtexts\\service\\Text",
-        "page":          "justso\\justtexts\\service\\Page",
-        "page/*":        "justso\\justtexts\\service\\Page",
-        "language":      "justso\\justtexts\\service\\Language",
-        "loadPlugins":   "justso\\justtexts\\service\\PluginLoader"
+        "page/*/text":   "justso\\justtexts\\TextService",
+        "page/*/text/*": "justso\\justtexts\\TextService",
+        "page":          "justso\\justtexts\\PageService",
+        "page/*":        "justso\\justtexts\\PageService",
+        "language":      "justso\\justtexts\\LanguageService",
+        "loadPlugins":   "justso\\justtexts\\PluginLoader"
     }
 }

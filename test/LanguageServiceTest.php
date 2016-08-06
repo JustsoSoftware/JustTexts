@@ -7,11 +7,9 @@
  * @package    justso\justtexts\test
  */
 
-namespace justso\justtexts\test;
+namespace justso\justtexts;
 
-use justso\justapi\Bootstrap;
 use justso\justapi\testutil\ServiceTestBase;
-use justso\justtexts\service\Language;
 
 /**
  * Class LanguageServiceTest
@@ -28,7 +26,7 @@ class LanguageServiceTest extends ServiceTestBase
             'languages' => array('de', 'en'),
         );
         $env->getBootstrap()->setTestConfiguration('/var/www', $config);
-        $service = new Language($env);
+        $service = new LanguageService($env);
         $service->getAction();
         $this->assertJSONHeader($env);
         $this->assertSame('["de","en"]', $env->getResponseContent());

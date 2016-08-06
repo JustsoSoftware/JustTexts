@@ -7,11 +7,9 @@
  * @package    justso\justtexts\test
  */
 
-namespace justso\justtexts\test;
+namespace justso\justtexts;
 
 use justso\justapi\testutil\ServiceTestBase;
-use justso\justtexts\model\PageList;
-use justso\justtexts\service\Page;
 
 /**
  * Class PageServiceTest
@@ -22,8 +20,8 @@ class PageServiceTest extends ServiceTestBase
     public function testGetPageList()
     {
         $env = $this->createTestEnvironment();
-        $pageList = new PageList(array('abc', 'def'));
-        $service = new Page($env);
+        $pageList = new PageList($env);
+        $service = new PageService($env);
         $service->setPageList($pageList);
         $service->getAction();
         $this->assertJSONHeader($env);
@@ -33,8 +31,8 @@ class PageServiceTest extends ServiceTestBase
     public function testGetSinglePage()
     {
         $env = $this->createTestEnvironment();
-        $pageList = new PageList(array('abc', 'def'));
-        $service = new Page($env);
+        $pageList = new PageList($env);
+        $service = new PageService($env);
         $service->setPageList($pageList);
         $service->setName('/page/def');
         $service->getAction();
@@ -46,15 +44,15 @@ class PageServiceTest extends ServiceTestBase
     {
         $env = $this->createTestEnvironment(array('name' => 'test'));
         $request = $env->getRequestHelper();
-        $page = new \justso\justtexts\model\Page('test', 'test', $request);
-        $mockBuilder = $this->getMockBuilder('\\justso\\justtexts\\model\\PageList');
-        $mockBuilder->setConstructorArgs(array(array('abc', 'def')));
+        $page = new \justso\justtexts\Page('test', 'test', $request);
+        $mockBuilder = $this->getMockBuilder('\justso\justtexts\PageList');
+        $mockBuilder->setConstructorArgs(array($env));
         $pageList = $mockBuilder->getMock();
         $pageList->expects($this->once())->method('getPage')->with('test')
             ->will($this->throwException(new \justso\justapi\InvalidParameterException()));
         $pageList->expects($this->once())->method('addPageFromRequest')->with('test', $request)
             ->will($this->returnValue($page));
-        $service = new Page($env);
+        $service = new PageService($env);
         $service->setPageList($pageList);
         $service->postAction();
         $this->assertJSONHeader($env);
@@ -67,8 +65,8 @@ class PageServiceTest extends ServiceTestBase
     public function testAddExistingPage()
     {
         $env = $this->createTestEnvironment(array('name' => 'abc'));
-        $pageList = new PageList(array('abc', 'def'));
-        $service = new Page($env);
+        $pageList = new PageList($env);
+        $service = new PageService($env);
         $service->setPageList($pageList);
         $service->postAction();
         // @codeCoverageIgnoreStart
@@ -79,13 +77,13 @@ class PageServiceTest extends ServiceTestBase
     {
         $env = $this->createTestEnvironment(array('name' => 'test'));
         $request = $env->getRequestHelper();
-        $page = new \justso\justtexts\model\Page('test', 'test', $request);
-        $mockBuilder = $this->getMockBuilder('\\justso\\justtexts\\model\\PageList');
-        $mockBuilder->setConstructorArgs(array(array('abc', 'def')));
+        $page = new \justso\justtexts\Page('test', 'test', $request);
+        $mockBuilder = $this->getMockBuilder('\justso\justtexts\PageList');
+        $mockBuilder->setConstructorArgs(array($env));
         $pageList = $mockBuilder->getMock();
         $pageList->expects($this->once())->method('changePageFromRequest')->with('test', $request)
             ->will($this->returnValue($page));
-        $service = new Page($env);
+        $service = new PageService($env);
         $service->setName('/page/abc');
         $service->setPageList($pageList);
         $service->putAction();
@@ -96,15 +94,27 @@ class PageServiceTest extends ServiceTestBase
     public function testDeletePage()
     {
         $env = $this->createTestEnvironment(array('name' => 'abc'));
-        $mockBuilder = $this->getMockBuilder('\\justso\\justtexts\\model\\PageList');
-        $mockBuilder->setConstructorArgs(array(array('abc', 'def')));
+        $mockBuilder = $this->getMockBuilder('\justso\justtexts\PageList');
+        $mockBuilder->setConstructorArgs(array($env));
         $pageList = $mockBuilder->getMock();
         $pageList->expects($this->once())->method('deletePage')->with('abc');
-        $service = new Page($env);
+        $service = new PageService($env);
         $service->setName('/page/abc');
         $service->setPageList($pageList);
         $service->deleteAction();
         $this->assertJSONHeader($env);
         $this->assertSame('"ok"', $env->getResponseContent());
+    }
+
+    protected function createTestEnvironment(array $params = [], array $header = [])
+    {
+        $env = parent::createTestEnvironment($params, $header);
+        $config = array(
+            'environments' => array('test' => array('approot' => '/tmp')),
+            'languages' => array('de'),
+            'pages' => array('abc', 'def')
+        );
+        $env->getBootstrap()->setTestConfiguration('/tmp', $config);
+        return $env;
     }
 }
