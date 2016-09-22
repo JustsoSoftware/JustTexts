@@ -16,7 +16,7 @@ define([ "jquery", "backbone", "models/Text" ], function ($, Backbone, Text) {
         model: Text,
 
         initialize: function (options) {
-            this.url = '/api/justtexts/page/' + options.page + '/text/' + options.language;
+            this.url = '/api/justtexts/page/' + options.page.replace(/\*/, '') + '/text/' + options.language;
         }
     });
 });
