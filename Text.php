@@ -102,7 +102,7 @@ class Text implements TextInterface
             $content = $textInfo;
         }
         $encodeFlags = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES;
-        $content = "/*global define*/\ndefine(" . json_encode($content, $encodeFlags) . ");\n";
+        $content = "'use strict';\n/*global define*/\ndefine(" . json_encode($content, $encodeFlags) . ");\n";
         $fs = $this->env->getFileSystem();
         $fs->putFile($this->getFileName($language), $content);
         $fs->putFile($this->getOutdateInfoFileName($language), json_encode($outdateInfo, $encodeFlags));
