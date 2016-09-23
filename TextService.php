@@ -132,7 +132,7 @@ class TextService extends RestService
      * @param string $pageName
      * @return Text
      */
-    private function getTextModel($pageName)
+    protected function getTextModel($pageName)
     {
         return $this->environment->getDIC()->get('\justso\justtexts\Text', [
             $this->environment,
