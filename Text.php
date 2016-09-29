@@ -70,14 +70,14 @@ class Text implements TextInterface
             $content = $content['root'];
         }
 
+        $outdateInfo = [];
         $fileName = $this->getOutdateInfoFileName($language);
         if ($fs->fileExists($fileName)) {
             $outdateInfo = json_decode($fs->getFile($fileName), true);
-        } else {
-            $outdateInfo = array_fill_keys(array_keys($content), true);
         }
         foreach ($content as $id => $text) {
-            $content[$id] = array('id' => $id, 'name' => $id, 'content' => $text, 'outdated' => $outdateInfo[$id]);
+            $outdated = isset($outdateInfo[$id]) ? $outdateInfo[$id] : true;
+            $content[$id] = array('id' => $id, 'name' => $id, 'content' => $text, 'outdated' => $outdated);
         }
 
         return $content;
