@@ -106,9 +106,9 @@ class PageServiceTest extends ServiceTestBase
         $this->assertSame('"ok"', $env->getResponseContent());
     }
 
-    protected function createTestEnvironment(array $params = [], array $header = [])
+    protected function createTestEnvironment(array $params = [], array $header = [], array $server = [])
     {
-        $env = parent::createTestEnvironment($params, $header);
+        $env = parent::createTestEnvironment($params, $header, $server);
         $config = array(
             'environments' => array('test' => array('approot' => '/tmp')),
             'languages' => array('de'),
