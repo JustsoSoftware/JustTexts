@@ -1,3 +1,5 @@
+'use strict';
+
 define({
     "root": {
         "confirmDeletePage": "Do you really want to delete this page? All texts on it will be lost!",
