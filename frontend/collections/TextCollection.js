@@ -7,11 +7,11 @@
  * @package    Generator
  */
 
+'use strict';
+
 /* global define */
 
 define([ "jquery", "backbone", "models/Text" ], function ($, Backbone, Text) {
-    'use strict';
-
     return Backbone.Collection.extend({
         model: Text,
 

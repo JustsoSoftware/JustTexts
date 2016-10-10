@@ -7,6 +7,8 @@
  * @package    Generator
  */
 
+'use strict';
+
 /* global require, define, alert, confirm */
 /*jslint nomen: true */
 
@@ -20,8 +22,6 @@ define([
     "views/TextView",
     "models/Text"
 ], function ($, Backbone, messages, PageCollection, Page, TextCollection, TextView, Text) {
-    'use strict';
-
     var pageListView,
         pageList = $("#pages"),
         textsList = $("#page-texts"),

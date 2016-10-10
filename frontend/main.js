@@ -7,6 +7,8 @@
  * @package    Generator
  */
 
+'use strict';
+
 /* global require, window */
 
 require.config({
@@ -29,8 +31,6 @@ require.config({
 });
 
 require([ "jquery", "backbone", "mainRouter" ], function ($, Backbone, Router) {
-    'use strict';
-
     // Instantiates a new Backbone.js Router
     window.router = new Router();
 });

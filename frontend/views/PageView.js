@@ -7,10 +7,10 @@
  * @package    Generator
  */
 
+'use strict';
+
 /* global define */
 define([ "jquery", "backbone", "underscore" ], function ($, Backbone, _) {
-    'use strict';
-
     var compiled = _.template($("#PageEntry").html());
 
     return Backbone.View.extend({
